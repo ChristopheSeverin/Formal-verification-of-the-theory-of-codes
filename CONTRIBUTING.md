@@ -1,0 +1,8 @@
+# Adding a proof
+
+1. Create a directory under `proofs/` with a short, descriptive name. Place the English manuscript and its compiled PDF in `manuscript/` with the same basename. Credit the proof author and any supervisor in their respective roles.
+2. Place the Lean files in `lean/` under a distinct module name. For example, the existing proof exports `ThreeWordCodes.MainTheorem` from `lean/ThreeWordCodes/MainTheorem.lean`. Put the main statement and its definitions where a reader can inspect the quantifiers and hypotheses. Put the public imports in the library's root module.
+3. Register the library in the root [lakefile.toml](lakefile.toml) with its `name` and `srcDir`. Add that name to `defaultTargets` so that `lake build` includes it. Existing results can be reused through their public Lean imports.
+4. Add `checks/Check.lean` to exercise the public statement and audit its transitive axiom dependencies. The [first proof's audit](proofs/three-word-completion/checks/Check.lean) checks for `propext`, `Classical.choice` and `Quot.sound`. Document the foundations used by the new proof in its guide.
+5. Write a local `README.md` giving the theorem, its scope, and links from the main steps to the manuscript and Lean files. Add the proof to the [collection index](README.md). Include every file required to read or rebuild the manuscript. Use relative links for material in the collection and public references for any outside dependencies.
+6. Run `./verify.sh` and `make -B papers` from the root. Include the rebuilt PDF in the same change as its source. Both commands discover entries using these directory conventions.

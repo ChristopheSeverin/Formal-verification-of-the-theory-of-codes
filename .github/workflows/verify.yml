@@ -1,0 +1,32 @@
+name: Verify proofs
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+
+jobs:
+  lean:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Install Lean toolchain manager
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends elan zstd
+          elan toolchain install "$(cat lean-toolchain)"
+      - name: Build, audit and replay the Lean proofs
+        run: ./verify.sh
+
+  manuscripts:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Install LaTeX
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends latexmk texlive-latex-extra lmodern
+      - name: Compile the manuscripts
+        run: make -B papers

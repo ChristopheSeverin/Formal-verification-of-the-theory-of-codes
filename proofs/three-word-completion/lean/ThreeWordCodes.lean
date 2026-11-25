@@ -1,0 +1,22 @@
+module
+
+public import ThreeWordCodes.BinaryReduction
+public import ThreeWordCodes.Tilings
+public import ThreeWordCodes.Crossed
+public import ThreeWordCodes.GraftExample
+public import ThreeWordCodes.Example
+public import ThreeWordCodes.Coordinates
+public import ThreeWordCodes.Realizations
+public import ThreeWordCodes.Residues
+public import ThreeWordCodes.ShortGaps
+public import ThreeWordCodes.LetterInduction
+public import ThreeWordCodes.PureMargins
+public import ThreeWordCodes.LengtheningMargins
+public import ThreeWordCodes.UniformCoordinates
+public import ThreeWordCodes.MarkerPositions
+public import ThreeWordCodes.Classification
+public import ThreeWordCodes.LetterTheorem
+public import ThreeWordCodes.PureCorollaries
+public import ThreeWordCodes.MainTheorem
+public import ThreeWordCodes.CrossedCommuting
+public import ThreeWordCodes.TerminalReductions

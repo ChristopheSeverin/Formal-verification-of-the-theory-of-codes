@@ -1,0 +1,327 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,amsmath,amssymb,amsthm,mathtools,booktabs,array}
+\usepackage[margin=24mm,top=22mm,bottom=21mm]{geometry}
+\usepackage{microtype}
+% Keep a rebuild independent of the host clock and absolute source path.
+\pdfinfoomitdate=1
+\pdftrailerid{}
+\pdfsuppressptexinfo=15
+\usepackage[hidelinks,pdflang={en},
+  pdfauthor={GPT-6.2 Astra},
+  pdftitle={Positive finite completion of three-word codes},
+  pdfsubject={A proof by GPT-6.2 Astra under the supervision of Christophe Cordero},
+  pdfkeywords={uniquely decodable codes, finite maximal codes, positive factorization}]{hyperref}
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{.5em}{}
+\titlespacing*{\section}{0pt}{2.2ex plus .4ex}{.9ex}
+\newtheorem{lemma}{Lemma}
+\newtheorem{prop}[lemma]{Proposition}
+\newtheorem*{mainthm}{Theorem}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\rev}[1]{\overleftarrow{#1}}
+\newcommand{\N}{\mathbb N}
+\newcommand{\bct}[1]{\lvert #1\rvert_b}
+\newcommand{\ini}{\operatorname{in}}
+\newcommand{\fin}{\operatorname{out}}
+\newcommand{\amb}{\mathrel{\sim}}
+\newcommand{\parhead}[1]{\par\smallskip\noindent\textit{#1.}\enspace}
+\raggedbottom
+\setlength{\emergencystretch}{1.6em}
+\begin{document}
+\begin{center}
+  {\LARGE\bfseries Positive finite completion of three-word codes\par}
+  \vspace{.65em}
+  {\large Proof by \textbf{GPT-6.2 Astra}\par}
+  \vspace{.15em}
+  {\normalsize Supervised by Christophe Cordero\par}
+\end{center}
+\smallskip
+For a finite alphabet $A$, write $A^*$ for the words on $A$, including the empty word $\eps$, and $A^+=A^*\setminus\{\eps\}$. The empty alphabet admits no three-element code, so assume $A\ne\varnothing$. Write $|w|$ for length and $\rev w$ for the word read backwards. A parsing is a sequence of the listed words, called its tokens. A list of nonempty words is \emph{injective} if distinct sequences of its indices have distinct concatenations. Otherwise it is \emph{ambiguous}. A set of nonempty words is a \emph{code} if its list of distinct elements is injective. A code is maximal on $A$ if it has no proper extension that is a code on $A$.
+\begin{mainthm}
+Every three-element code $X\subseteq A^+$ is contained in a finite maximal code $M$ on $A$ for which there exist finite $L,R\subseteq A^*$ such that each word in $A^*$ has a unique expression $\ell m_1\cdots m_k r$, where $\ell\in L$, $r\in R$, $k\ge0$ and $m_i\in M$. Such a code $M$ is called positively factorizing.
+\end{mainthm}
+\section{Certificates and shortening}
+For a finite word set $D$, let $[D]=\sum_{d\in D}d$ in the ring of noncommutative polynomials. The unit $1$ represents $\eps$. Call a list \emph{completable} if it is injective and its entries belong to the support of a polynomial as in Lemma~\ref{cert}.
+\begin{lemma}\label{cert}
+Suppose $P,Q$ are finite polynomials with nonnegative integer coefficients and constant terms $1$. If $F=1+P([A]-1)Q$ has nonnegative coefficients, its support is a finite maximal code, with $L=\operatorname{supp}Q$ and $R=\operatorname{supp}P$.
+\end{lemma}
+\begin{proof}
+$F$ has constant term zero. In integer formal series, a series of constant term $1$ has an inverse by the geometric series in its nonconstant part, coefficientwise finite. Thus
+\[
+ Q(1-F)^{-1}P=(1-[A])^{-1}=\sum_{w\in A^*}w .
+\]
+The left side counts choices with multiplicities. Each coefficient of $P,Q,F$ is at most one, since the other factors admit the empty choice. The same identity gives precisely one indicated factorization and, by taking the two empty outside factors, unique decodability. Substituting $1/|A|$ for every letter gives $F=1$ numerically. For any nonempty finite code $D$ of greatest word length $d$ and weight sum $s=\sum_{w\in D}|A|^{-|w|}$, all products of $k$ words are distinct. The mass at each fixed length is at most one, so $s^k\le kd+1$ and $s\le1$. Adding a word to the support would violate this bound.
+\end{proof}
+A finite nonempty prefix code (no word is a proper prefix of another) is injective, since at each boundary at most one token can fit the remaining text. It extends to the leaves $D$ of the tree having all its proper prefixes as internal nodes $I$ and all $A$-children at each such node. The children counted in $[I][A]$ are exactly the leaves and the nonroot internal nodes, so $[D]-1=[I]([A]-1)$. Reading from the right gives the suffix version. Reversal exchanges the two factors of a certificate.
+If some prescribed words are encoded over a completable code, a completable list on the names of its words has completable images. Indeed, first enlarge the outer alphabet to the names of all leaves of the inner completion by replacing each old letter with the sum of its preimages under a letter map fixing the old alphabet and surjecting onto it. Each old word is replaced by its disjoint fiber. For the resulting outer certificate $1+P_e([B]-1)Q_e$, the coding $h$ sends $[B]-1$ to $P_i([A]-1)Q_i$ for the inner completion. The new factors are $h(P_e)P_i$ and $Q_i h(Q_e)$, and all required words survive because $h$ is injective. The same alphabet enlargement works for any prescribed set on a smaller alphabet.
+\parhead{Shortening rules}
+If $u,ur$ are entries, replacing $ur$ by $r\ne\eps$ is called a left shortening. Before any coincidence, the old entries on the new names are $U,UR$ and the other unchanged names, a suffix code. Thus injectivity and completability lift from the shorter named list. Right shortening is the reverse. More generally a distinguished entry $v$ can be replaced by $u^iv u^j$ for $i,j\ge0$ while retaining all other entries, by first prefixing and then suffixing in two such tree constructions. One may prepend any word on the other names to an entry by the same suffix-code argument, or append one by reversal.
+Two noncommuting words form a completable pair. Indeed, a left shortening of a comparable pair preserves noncommutation by cancellation. It therefore cannot produce a coincidence. It terminates at a prefix pair. Conversely two commuting words are powers of a common word, by the same shortening and induction on total length (equal words give the base case). Distinct commuting words are never a code. If two words use an alphabet disjoint from a private letter $Z$, the same pair construction retains $Z$ throughout.
+\parhead{Greedy reading}
+Given a finite prefix code $D$, remove complete tokens from the beginning of $w$ as long as possible. The unread suffix is empty, a proper prefix of a token, or incomparable with every token. In the last case, call the suffix $r$. The enlarged set $D\cup\{r\}$ is a prefix code. Over its token names, each old word is a single letter, and the reading of $w$ ends in the fresh name of $r$. These readings form a suffix code, so composition gives a completion of $(D,w)$. It follows that ambiguity of $(D,w)$ forces $w$ to be a prefix of a product on $D$. Reversal gives the corresponding test for suffix codes. The same construction works when the old words already have distinct last names and the remainder supplies a fresh last name.
+
+\parhead{A minimal counterexample}
+Repeated left shortenings, merging coincident entries, eventually give a prefix set $B$. The original entries are products on $B$ and every element of $B$ occurs. A one-word $B$ would make all original entries commute. If $|B|=3$, there was no merger and all shortenings lift. If $|B|=2$, $B$ is completable and a reading of the original triple on $B$ is an injective list. If any word of $B$ has length greater than one, this reading is strictly shorter in total length. Thus in a counterexample of minimal total length over all finite alphabets, $B$ must be the two letters of the support. Alphabet enlargement lets us work on this support. In particular every terminal left and right reduction gives these letters. Left shortenings introduce no new last letter, and right shortenings no new first letter. Both letters therefore occur at each end of the original triple. There must be a prefix comparison and a suffix comparison, each on the unique pair sharing the corresponding end letter.
+\section{Binary words and equations}
+Write $H_m(g)=b(a^g b)^{m-1}$ for $m\ge1$. The initial and terminal runs of $a$ in a word containing $b$ are its \emph{margins}. Its \emph{gaps} are the lengths of the runs between successive $b$'s. Trimming the two margins leaves the body, from the first to the last $b$. Empty products are understood throughout.
+\parhead{Two ways to locate tokens}
+Suppose certain tokens contain a distinguished copy of a fixed body $K$, and every gap from a specified set of lengths in a parsed text lies inside one of these copies. If $K$ contains $r>0$ such gaps, group them in consecutive packets of $r$ in the text. The first gap of each packet has a fixed offset in $K$ and thereby locates its entire copy. Thus the positions of the distinguished bodies are independent of the parsing.
+
+A second test uses residues. For letters $J,D$ and $m\ge1$, consider $J^m$ together with the tokens $J^{r_i}D J^{s_i}$. They form a code if every $r_i$ is a multiple of $m$ and the $s_i$ are distinct modulo $m$. Indeed the $J$-run following a given $D$, up to the next $D$ or the end, is congruent to $s_i$ modulo $m$. Its residue determines that token, whose position is now fixed. The remaining pure tokens are determined by length. Reversal gives the test with $r_i,s_i$ exchanged.
+
+\begin{lemma}\label{counts}
+Let $(a,U,V)$ be ambiguous, with $m=\bct U$, $n=\bct V$, $2\le m<n$ and $\gcd(m,n)=1$. All interior gaps of both words have a common value $g$, and all four margins are at most $g$. The same conclusion holds if, in place of ambiguity, every complete left and right reduction of this triple ends with two letters.
+\end{lemma}
+\begin{proof}
+Remove initial $a$'s from both mixed words by left shortening. As long as their positive $b$-counts differ they stay distinct, and the two words now starting with $b$ must be prefix-comparable. Otherwise an injective terminal triple has been reached. This is impossible under either hypothesis. Write $n=qm+r$, $0<r<m$. Repeatedly remove the smaller word from the larger, stripping newly exposed initial $a$'s each time. Each of the $q$ full blocks reproduces the $m-1$ interior gaps of $U$. The final remainder, having $r$ letters $b$, must be a prefix of the stripped $U$ and reproduces its first $r-1$ gaps. If $G_i,E_i$ are the gaps of $U,V$, respectively, the two directions therefore give
+\[
+ E_i=G_{i\bmod m}\quad(m\nmid i),\qquad
+ E_i=G_{(i-n)\bmod m}\quad(m\nmid i-n),\quad 1\le i<n .
+\]
+For the nonzero residues modulo $m$ these identities join residues differing by $r$ whenever both are nonzero. The cycle of step $r$ visits all residues and deleting zero leaves a connected path. Hence all $G_i$ coincide, and at least one formula applies at each $i$. The terminal margin of $U$ fits before the next $b$ of $V$ in the first removal, and that of $V$ fits before the next $b$ of $U$ in the final comparison. Reversal bounds the two initial margins.
+\end{proof}
+If $(a,a^i b a^j,W)$ is ambiguous, all gaps of $W$ are at least $\max(i,j)$. Indeed shortening gives ambiguity for $(a,ba^j,W)$ and $(a,a^i b,W)$. The first pair is prefix and the second suffix, so greedy reading forces these bounds. In particular for $W$ beginning with $b$,
+\begin{equation}\label{one}
+ (a,a^c b,W)\text{ is ambiguous}\quad\Longleftrightarrow\quad
+ \text{all gaps of }W\text{ are at least }c .
+\end{equation}
+For the converse, $a^cW$ reads on $a,a^c b$. The reverse statement exchanges initial and terminal margins.
+\begin{lemma}\label{short}
+Suppose $W$ begins and ends in $b$ and $(a,a^i b a^j,W)$ is ambiguous, where $i,j\ge1$. Split $W$ at gaps shorter than $i+j$. If there are any, they all have the same length and all the intervening blocks, including the two end blocks, are identical.
+\end{lemma}
+\begin{proof}
+In two distinct parsings, the partitions of the $b$'s into copies of $W$ and singletons must differ, since prescribed margins then determine the remaining $a$'s. At the first different group, one parsing starts a copy of $W$ and the other starts with singletons. If the first short gap of $W$ follows its $d$th $b$, the latter parsing must start a copy of $W$ after $e$ singletons with $1\le e\le d$, since adjacent singletons require $i+j$ letters $a$. If $e<d$, its gap $d-e$ is already short, a contradiction. Thus $e=d$, and overlapping the two copies gives $g_s=g_{s-d}$ for $d<s<M=\bct W$. Short gaps occur exactly at $d,2d,\ldots,td<M$. In reverse their first index is $d'=M-td\le d$ and there are still $t$ of them. The reverse argument gives $M\le(t+1)d'$, hence $d\le d'$. Thus $d=d'$, $M=(t+1)d$, and the overlap identities give the assertion.
+\end{proof}
+For group calculations we use signed letters with adjacent inverse pairs cancelled. Their reduced form is obtained by reading left to right, erasing the last stored letter when it is inverse to the new one and appending the new letter otherwise. Processing any adjacent inverse pair leaves the stored reduced word unchanged, whether the first letter appends or cancels. Thus the algorithm is invariant under insertions and deletions of such pairs and gives the unique reduced form. In particular positive words embed. Substitutions of group coordinates with explicit inverse substitutions preserve all equalities between named products, including when the new expressions happen to be positive.
+
+\begin{lemma}\label{model}
+Every ambiguous list of three nonempty, pairwise noncommuting words has a binary realization $(a,P,Q)$, up to permutation, with exactly the same equalities between products of the three names. Both letters occur at each end. The numbers $m=\bct P,n=\bct Q$ are positive and coprime. If $m,n\ge2$, the words have the uniform gaps and bounded margins of Lemma~\ref{counts}, with $g\ge1$. Otherwise one is $a^h b a^q$ and all gaps of the other are at least $\max(h,q)$.
+\end{lemma}
+\begin{proof}
+We first show that an ambiguous nonperiodic list (its words are not all powers of one word) has an equivalent realization with a letter as an entry. Two realizations are equivalent when their equalities on names coincide. If two entries commute, use their common root and the remaining word as two independent letters, which works by the two-word result. In particular this handles coincidences.
+
+Whenever a letter realization is available, minimize its total length among equivalent letter realizations. A prefix reduction must reach a merger, since otherwise a terminal prefix triple would give injectivity. The two remaining generators are noncommuting. Decoding on them preserves all relations and gives another letter realization, since the old one-letter entry must itself be one of the two generators. Since both generators are used, any generator of length greater than one would strictly shorten this reading. Thus both are letters by minimality. The same reasoning from the right shows that both end letters appear in each direction. The gcd of the $b$-counts is invariant under subtraction of counts and merging duplicates, so it is one. In the pairwise noncommuting case both counts off $a$ are positive. Lemma~\ref{counts} gives the assertion for two counts greater than one. If $g=0$ their margins vanish and they commute. The one-$b$ bound was proved above.
+
+It remains to establish existence of a letter realization. Induct on the original total length. In the absence of a commuting pair, left-shorten a comparable pair. The shortened list is still ambiguous, and it is nonperiodic because its words generate all the original words. If it has a commuting pair, represent that pair by powers of one letter and the remaining word by another letter. Either the latter word survives the lengthening or the original list still has the commuting pair. We may therefore suppose that the shortened pieces are pairwise noncommuting. By induction and the normalization above, take a binary letter realization of them. If an unchanged name is a letter, undo the shortening. Otherwise the letter $a$ is the entry that is lengthened. The old list is now represented by
+\[
+                         (P,Pa,Q).
+\]
+The normalized triple $(a,P,Q)$ has the count, gap and margin bounds already proved.
+
+Write $i,h$ for the initial margins of $P,Q$. The terminal margin of $P$ must be zero. If it were $j>0$, $Q$ would end in $b$, and the three terminal margins $j,j+1,0$ would give a suffix code. The terminal margin $q$ of $Q$ is $0$ or $1$ by the same test. At least one of $i,h$ vanishes. If their starts differ, a first difference in an ambiguity compares $P$ with $Pa$. Cancellation gives $F=aG$ between products, both containing $b$ (no token is a power of $a$). Their initial margins differ by one, so $\{i,h\}=\{0,1\}$.
+
+If $m=1$, then $P=a^i b$. Since $P,Pa$ form a suffix code, ambiguity forces $Q$ to be a suffix of a product on this pair. Every interior gap of $Q$ is $i$ or $i+1$. For $h\ge i$, $Q$ reads on $a,P$, giving a model with $P$ a letter. For $h<i$, use the independent group coordinates $J=Pa$, $D=a^{-1}$. They have inverse $a=D^{-1}, b=D^i J D$. In these coordinates $P=JD$, $Pa=J$ and $Q$ has margins $i-h,1-q$ in $D$, with internal $D$-gaps $i+1-g_s\ge0$ between its $J$'s. These are positive words with a letter entry.
+
+Suppose $n=1<m$. If $i=h=0$, split each product of these three tokens immediately before each $b$. Read each $ba^r$ as one symbol. Every token starts in $b$, so runs do not merge at joins and expanding the finitely many symbols used recovers the original text. This recoding makes $Q$ a letter. Otherwise $\{i,h\}=\{0,1\}$. Any gap of $P$ larger than two would mark its body in every product of $P,Pa,Q$, since all joins have gap at most two and $Q$ has only one $b$. The marked gaps therefore locate every $P$ body by the grouping argument. All remaining $b$'s are singletons $Q$. With bodies located, left margins are known, so the right margins distinguish $P$ and $Pa$, also at the end. This would give injectivity. Thus all gaps are at most two. If $Q=b$, it already is a letter. Otherwise use $J=aba$, $D=a^{-1}$, with $b=DJD$. If $Q=aba$, it becomes $J$ and all three words are positive. For $Q=ab$ or $ba$, ambiguity of $(a,P,Q)$ gives gaps of $P$ at least one. Write $T$ for the image of $Pa$. The new list is $(TD,T,Q')$ with $Q'$ equal to $JD$ or $DJ$. Its ambiguity forces ambiguity of $(D,T,Q')$ by shortening, so all gaps in $T$ are at least one. These gaps are $2-g_s$, hence every $g_s=1$.
+
+Now suppose $m,n\ge2$. Their common internal gap is $g$. For $g\ge2$ use $J=aba^{g-1}$ and $D=a^{-1}$, giving $b=DJD^{g-1}$. The images of $Pa,Q$ are
+\[
+ T=D^{1-i}J^mD^{g-2},\qquad V=D^{1-h}J^nD^{g-1-q}.
+\]
+As above $(D,T,V)$ is ambiguous. Its interior gaps are zero, and Lemma~\ref{counts} would force both initial margins to vanish. This contradicts $\min(i,h)=0$. Thus $g=1$.
+
+In both remaining cases all internal gaps of $P,Q$ equal one, vacuously for a singleton. If $i=h=0$ (only needed for $m,n\ge2$), put $K=ba$, $D=a^{-1}$. The words are $K^mD,K^m,K^nD^{1-q}$. For $q=1$ two commute. For $q=0$ the reversed residue test gives injectivity, since the initial exponents $m,n$ differ modulo $m$ and both terminal exponents are zero. If $i=0,h=1$, put $K=ba$, $S=P=K^m a^{-1}$. If $i=1,h=0$, put $K=ab$, $S=Pa=K^m a$. In either case $K,S$ are free coordinates (recover $a$ from the displayed equation, then $b$ from $K$). The three entries, in some order, are $S,K^m$ and either $S^{-1}K^{m+n}$ or $S^{-1}K^nS$. For $i=0$ use $a=S^{-1}K^m$ and $Q=aK^n a^{q-1}$. For $i=1$ use $a=K^{-m}S$ and $Q=a^{-1}K^n a^q$. Put $S=A$, $K=AB$ for new free letters $A,B$. All entries are now positive and $S$ is a letter. This closes the induction.
+\end{proof}
+When two equivalent realizations of an ambiguous triple each have two distinct initial letters, the equal-initial pair of names is the same in both. Cancel common initial names in any nontrivial equality. The next two names are distinct and must have equal initials in both realizations. Right cancellation proves the same assertion for final letters. Consequently we may test injectivity of any list of products, and any identity between products, in the model of Lemma~\ref{model}. Completions will always be constructed on actual word alphabets.
+
+\section{One construction for two families of prescribed words}
+\begin{lemma}[Tree extension]\label{graft}
+Let $D$ be the leaves of a finite complete prefix tree on $A$, with coding $\phi:D^*\to A^*$. Let $E\subseteq D^+$ be a finite suffix code, and let $J$ be its proper suffixes, including $\eps$. Fix an entry $s\in E$ and $t\in A^+$. Suppose $t\notin\phi(J)$, and $sq\in E$ whenever $q\in J$ and $\phi(q)$ is prefix-comparable with $t$. Then $\phi(s)t$ and all the $\phi(e)$ with $e\in E\setminus sJ$ are contained in a code with a certificate.
+\end{lemma}
+\begin{proof}
+Writing $I$ for the proper prefixes of $D$, the complete suffix tree with internal nodes $J$ gives the coded leaf polynomial $M_0=1+[I]([A]-1)[\phi(J)]$. Make a complete prefix tree on $A$ with leaves $T$ including $t$ and the prefix-minimal elements among the $\phi(q)$ incomparable with $t$. With $K$ its internal nodes, form
+\[
+ F=M_0+\phi(s)([T]-1)[\phi(J)]
+   =1+([I]+\phi(s)[K])([A]-1)[\phi(J)] .
+\]
+The subtracted words $\phi(sq)$ are distinct. In the comparable case they are leaves of $M_0$. Otherwise $\phi(q)=r\phi(q')$ for a chosen minimal $r$ and $q'\in J$, since $r$ ends at a token boundary in the unique prefix reading and $q'$ is a suffix of $q$. Thus the corresponding subtraction is covered by an addition on the same word. The target is added by $t$ and is never subtracted. The specified other leaves are preserved. Apply Lemma~\ref{cert}.
+\end{proof}
+We shall use abstract letters $A_0,B_0$ with images $x,d$ in a free group. In the first application $x=a,d=b$. In the second $x=(ab)^s a$ and $d=((ab)^{s-1}a)^{-1}$, with $s\ge1$. Fix $k,l\ge1$ and a nonempty list $G=(g_1,\ldots,g_m)$ of positive integers. Write
+\[
+ w(G)=B_0 A_0^{g_1}B_0\cdots A_0^{g_m}B_0,\qquad w(\varnothing)=B_0 .
+\]
+The prescribed words are the positive images of $A_0$, $U=A_0^k B_0 A_0^l$ and $W=w(G)$. Write $z$ for the image of $W$. An ambiguity on the three abstract names gives an ambiguity of the prescribed list by substitution. A constructed completion for lower positive exponents $i\le k$, $h\le l$ lifts by the shortening rules, provided it contains the three indicated distinct words. In the construction they are distinct leaves. Reversal in either application reverses the list and exchanges $k,l$, since the images of the two abstract letters are palindromes or inverses of palindromes.
+
+\parhead{Reading a list of gaps}
+For a chosen orientation and exponents $i,h$, let $H=i+h$. Suppose $g\ge h$ for every entry. Use two tokens $A,C$ with images $x,dx^h$ that are positive, have distinct initial letters and both end in $a$. Complete them to a prefix tree $D$. Define, on lists, the multiplicative notation
+\[
+ e(g)=A^{g-h}C,\qquad S(V)=C e(V).
+\]
+Then $\phi(S(G))=z x^h$. The two leaves to preserve on $D$ are $A,A^i C$. The required visibility condition is that $z$ ends in $b$ and contains the first literal letter of every $A$ token in this reading of $\phi(S(G))$. Thus any wholly invisible tokens form a final string of $C$'s. For $x=a,d=b$ the condition holds, since deleting the final $a^h$ cuts only the final token $ba^h$.
+
+Call entries less than $H$ short. Cut $G=u v$ after a short entry, with both parts nonempty. Extra leaves will be $S(Z)$ for certain prefixes $Z$ of $G$ beginning with $u$ and ending short, including $u$ itself. Such leaves are suffix-incomparable with $A,A^i C$ because the final two $C$'s are separated by fewer than $i$ letters $A$. Two extra leaves are suffix-comparable exactly when their lists are, by aligning the first $C$ of the suffix. The literal word to append to $\phi(S(u))$ is the remainder $t$ of $z$. Our choices leave an entry $>h$ in $v$, so at least its first $A$ is visible, and $t$ is nonempty and ends in $b$.
+
+Here are precise tests for Lemma~\ref{graft}. Every proper suffix $q$ of a selected leaf uses only $A,C$. If it is nonempty, it ends in $C$ and $\phi(q)$ therefore ends in $a$, unlike $t$. If $\phi(q)$ is a prefix of $t$, deterministic reading gives $q=e(v')$ for a nonempty initial sublist $v'$ of $v$. Its last entry is short because it is the terminal gap of a selected leaf, possibly reduced if $v'$ consists of one entry. For a proper suffix of $A^i C$ there is only one closing $C$ and at most $i-1$ preceding copies of $A$, so its single entry is at most $h+i-1$. When reading some list at the beginning of a proper suffix of $S(Z)$, it occurs in $Z$ with the first entry possibly increased in $Z$, since the suffix can begin partway along a run of $A$'s. Its first closing $C$ cannot be the initial $C$ of $S(Z)$.
+
+Conversely, if $t$ is a prefix of $\phi(q)$, every token whose initial is visible in $t$ is determined by its initial letter. In particular, for any initial sublist of $v$ ending in an entry $g>h$, every entry through that position must be matched in the host list. Even if its closing $C$ is invisible, the $g-h$ letters $A$ have been recognized and $q$ ends in $C$, so the host can only increase that last entry. All strictly intermediate entries are exact. The two possible increases refer to the same entry when the sublist has length one. These tests also apply to a fully read suffix by dropping the possible last increase. Leaves $S(u)q$ begin with $C$, so neither of the two leaves to preserve is subtracted.
+
+\parhead{Selecting the leaves}
+First suppose the only short value is $m_0$ and that the blocks between successive short entries, including the end blocks and empty blocks, are not all identical. Choose a block $L$ of greatest weight $\sum_{g\in L}(1+g)$. It is nonempty. A demand for all of $L$ in a host block identifies exactly that block, even if either end entry can increase, since every increase or extra entry increases its weight.
+
+If one end block differs from $L$, orient so the initial one differs. Cut immediately before the first $L$, putting its preceding separator in $u$, and choose only $S(u)$. No nonempty suffix can read the whole of $L$, since it is absent from $u$. A suffix ending before it is read would end long, which is impossible. A suffix of $A^i C$ has only a short entry. Thus the tree extension applies.
+
+If both end blocks are $L$, choose the direction in which the initial run of $L$'s has length $r$ no greater than the terminal run. There is a later run of length at least $r$ with a different block immediately before it. Let $D'$ be the block before the first such run. Cut just before $D'$, leaving its preceding separator in $u$. Then $v$ begins with $D'm_0 L(m_0 L)^{r-1}$. Use the prefixes
+\[
+                   u,\qquad uD'm_0(Lm_0)^j\quad(0\le j<r).
+\]
+The pattern $L(m_0 L)^{r-1}$ occurs only at the start of each selected prefix. Maximal weight identifies whole blocks, the initial run has length exactly $r$, and after the separating block at most $r-1$ copies have been included. Hence no chosen list is a proper suffix of another. The full initial demand in $v$ cannot match any suffix, since this pattern would occur strictly after its start, even if $D'$ is empty. Before the full demand, the only nonempty prefixes ending short are $D'm_0(Lm_0)^j$, $0\le j<r$. Their extensions are precisely the leaves provided. The empty suffix is covered by $S(u)$. Lemma~\ref{graft} applies.
+
+For the main application let $m_0=\min G\ge\max(k,l)$. If $m_0\ge k+l$, the word $A_0^k W A_0^l$ reads on $A_0,U$ by assigning the two required margins at each $B_0$. This is an ambiguity. Otherwise lower the threshold to $m_0+1$, keeping $h=l$ and taking $i=m_0+1-l$ (exchange the original exponents after reversal). Only $m_0$ is short. If the blocks all agree, write $G=V(m_0 V)^j$, $j\ge1$. If every entry of $V$ is at least $k+l$, including $V=\varnothing$, put $T=w(V)$ and $E=A_0^k T A_0^l\in\{A_0,U\}^*$. Since $W A_0^{m_0}T=T A_0^{m_0}W$, we have two parsings
+\[
+ A_0^k W A_0^{m_0-k}E=E A_0^{m_0-l}W A_0^l .
+\]
+They differ because $E$ contains $U$ and has exactly $k$ leading $A_0$'s before its first $B_0$ in the underlying word, so its parsing starts with $U$. Otherwise $h_0=\min V$ satisfies $m_0<h_0<k+l$. Use threshold $h_0+1$, again keeping the right exponent. The only short values are $m_0,h_0$.
+
+If $V$ has a long entry and an end of $V$ is long, orient so that it ends long. Cut after the last $h_0$ in the first $V$ and select only $u$. The remaining demand begins with long entries and then $m_0$, followed by a second $V$. A fully read prefix stopping before $m_0$ ends long. The $m_0$ cannot be matched in $u$, which has none. Indeed it is strictly after the first entry and before a later entry $>h$ in the second $V$, so its closing token is visible for the opposite comparison. If both ends of $V$ are $h_0$ and $V$ contains a long entry, cut before the first long block of greatest weight in $V$, whose preceding entry is $h_0$. Its weight excludes a match in $u$, and an earlier stop ends long. In both cases $S(u)$ suffices. Finally, if $V$ consists of $p\ge1$ copies of $h_0$, take $u=h_0^p$ in list notation and select $u$ and $u m_0 h_0^e$ for $0\le e<p$. Within each list $p$ consecutive $h_0$'s occur only initially, excluding suffix comparability. The initial demand $m_0 h_0^p$ in $v$ cannot be met, even if its ends increase, because $h_0$ is the largest host entry and the run would begin after the first entry. All shorter nonempty prefixes ending short have their extensions prescribed. The last demanded $h_0$ is greater than $h$, as required. This proves the construction whenever the stated readings and visibility hold in the orientations used.
+
+\begin{prop}\label{power}
+Every three-word code with an entry that is a power of a letter is completable.
+\end{prop}
+\begin{proof}
+Apply the minimal-counterexample reduction in Section~1 within this class. When decoding $a^d$ on a prefix pair, precisely one generator used there is a pure $a$-word (two would be prefix-comparable), so the reading remains a power of a letter. The reduction from the right works as well. On the resulting binary alphabet, each other entry has a $b$. If their terminal margins have different residues modulo $d$, strip multiples of $d$ from them on the right. The remaining margins are distinct and less than $d$, making a suffix code with $a^d$. Restoring the multiples on distinct names gives a prefix code. If the common residue is nonzero, all words end in $a$, impossible. If it is zero, divisibility by $d$ of all terminal $a$-runs survives left shortening, since a mixed remainder keeps the terminal run and a pure remainder has the difference of the terminal runs. The terminal letter basis contains $a$, so $d=1$.
+
+Write the triple $(a,U,V)$ and put $m=\bct U$, $n=\bct V$. These counts are coprime by subtraction in terminal reduction. Their initial margins have minimum zero, and so do their terminal margins. If both counts exceed one, they are distinct by coprimality. Order them by size and apply the terminal-reduction form of Lemma~\ref{counts}. If each word's two margins sum to at most $g$, a text of $mn$ letters $b$ with intervening gaps $g$ and sufficiently large outside margins can be tiled with $n$ copies of $U$ or $m$ copies of $V$, filling unused positions with $a$. If one sum exceeds $g$, its two margins are positive by the separate bounds. The other word has both margins zero. Now the orders $UV$ and $VU$ can both tile a text with $m+n$ equally spaced $b$'s, since each of the two required join margins is at most $g$. Both alternatives contradict injectivity.
+At least one of $U,V$ therefore contains exactly one $b$. Interchanging $U$ and $V$ if necessary, write $U=a^i b a^j$. If $j=0$, read $V$ on the suffix pair $a,U$. A complete reading gives ambiguity. A remaining proper suffix is $a^r b$ with $r<i$, in which case prefixing $V$ by $a^{i-r}$ gives a complete reading and an ambiguity. An incomparable remainder gives a completion by greedy reading. Reverse for $i=0$. Otherwise $V$ starts and ends in $b$, and contains at least two $b$'s (the alternative $V=b$ makes $U$ decodable). Shorten $a^i b a^j$ to $ba^j$ and read $V$ on the prefix pair $a,ba^j$. A gap below $j$ would put a $b$ strictly inside the required $a^j$, giving an incomparable remainder and a terminal prefix triple before a merger. Thus all gaps are at least $j$. Reversal gives the bound $i$. The preceding construction with $x=a,d=b,k=i,l=j$ now applies, giving the contradiction.
+\end{proof}
+\begin{prop}\label{altern}
+Let $x=(ab)^s a$, $y=x^k ba\,x^{l-1}$ with $s,k,l\ge1$. Every three-word code $(x,y,z)$ is completable.
+\end{prop}
+\begin{proof}
+Put $c=ba$ and $f=(ab)^{s-1}a$, so $x=fc$ and $d=f^{-1}$. Both $x$ and $f$ are palindromes, and $y=x^k d x^l$. The prefix pair $x,cx^{l-1}$ reads $x,y$ with different final names. Read $z$ on it. A complete reading yields a triple containing a letter, hence a completion by Proposition~\ref{power} and composition. An incomparable remainder gives a fresh last name and a completion. The same applies in reverse with $k,l$ exchanged. We may therefore suppose that $z$ and its reversal are prefixes of products on the respective pairs. They are in particular prefixes of products on $x,c$. Such products contain neither $bb$ nor $aaa$.
+
+If $z$ ends in $a$ and contains $aa$, consider its last $aa$. In the forward reading the second $a$ starts a token $x$. The reverse reading from the final $a$ starts with a full $x$ before crossing this double, since a double $a$ occurs only at a boundary and the initial token must be $x$. Thus the alternating tail starting at the second $a$ has at least $s$ letters $b$ and ends in $a$. It is $xc^j$ for some $j\ge0$, so $z$ reads completely on $x,c$. This gives a letter after decoding. Reverse if $z$ starts in $a$. For a wholly alternating $z$ with unlike ends, one orientation reads it on $c$ alone. If both ends are $a$, write $z=(ab)^t a$. For $t=0$ apply Proposition~\ref{power}. For $t>0$, the prefix pair $(ab)^{\min(s,t)}a,c$ reads everything and gives a letter. It remains that $z$ starts and ends in $b$.
+
+There is then a unique expression
+\[
+ za=c^{r_0}a c^{r_1}\cdots a c^{r_j},\qquad r_0,\ldots,r_j\ge1 ,
+\]
+by splitting at the double $a$'s that separate the alternating runs. For $0<i<j$, $r_i\ge s$ since the $x$ starting at the double must finish before the next double. On $x,c$, named $A,C_1$, the word $zx$ has reading
+\[
+ N=C_1^{r_0} A C_1^{r_1-s}\cdots A C_1^{r_{j-1}-s} A C_1^{r_j}
+ \quad(j\ge1),\qquad N=C_1^{r_0+s}\quad(j=0).
+\]
+For $j=1$ the expression is $C_1^{r_0} A C_1^{r_1}$. Reversal of $z$ reverses the sequence of $r_i$ and hence the reading $N$. Write $N=C_1 A^{g_1-1}C_1\cdots A^{g_m-1} C_1$ with $m\ge1$. As $dx=c$, the images of $U,W$ are $y,z$ because $WA_0$ expands on $A_0,B_0 A_0$ exactly as $N$.
+
+For $h=1$ the prefix $z$ of $zx$ satisfies visibility. Indeed, deleting the final $x$ conceals only a final string of whole $C_1$'s, possibly cutting the preceding token. From the formula there are $\min(r_j,s)$ such whole tokens if $j\ge1$, and $s$ if $j=0$, since $|x|=2s+1$ and $|c|=2$. If fewer than $s$ fit, the remaining deletion is shorter than $x$. If $j=0$ and $r_0=1$, $z=b$ and Proposition~\ref{power} applies. If $j=0$ and $r_0\ge2$, $z$ begins with $bab$ in both directions, so reading on $x,cx^{l-1}$ and its reverse counterpart forces $l=k=1$, since $cx$ starts with $baa$. All gaps of $N$ are then one and the common-block ambiguity above applies. If $j\ge1$ and $r_0$ or $r_j$ exceeds one, $G$ has a $1$ at an end and an entry greater than one elsewhere. At $i=h=1$ the blocks cut at $1$ differ (one end block is empty), and the tree extension yields the completion, followed by lengthening.
+
+It remains that $r_0=r_j=1$. Exactly the last $C_1$ is wholly invisible in $N$, and the preceding $A$ has its initial visible. In the forward reading each visible $C_1$ must begin the token $C_1 A^{l-1}$, so $g_i\ge l$ for $i<m$. In reverse $g_i\ge k$ for $i>1$. Whenever $h\le l$ and all $g_i\ge h$, grouping $N A^{h-1}$ using $C=C_1 A^{h-1}$ gives $S(G)$ exactly. Every preceding $C$ has the initial of its old $C_1$ visible, and every ungrouped $A$ still has its initial visible. Hence only the last $C$ can be entirely invisible. The images of $A,C$ start in $a,b$ and end in $a$. This verifies the visibility and reading requirements in either orientation.
+
+If $\min G\ge\max(k,l)$, the construction applies as stated. Otherwise, for $m\ge2$ reverse if necessary so $k>l$ (if $k=l$, the above bounds cover all entries). The sole gap below $k$ is $g_1\ge l$. At threshold $g_1+1$, with $h=l$ and $i=g_1+1-l$, the initial block is empty and the remaining block is long, so the first choice of leaves applies in the forward orientation. If $m=1$ and $l>g_1$, we have $f z f=x^{g_1}$. The words $x,z,f x^{l-g_1}$ are prefix-incomparable because $z$ begins in $b$ and the other two diverge immediately after $f$. Since $y=x^k z(f x^{l-g_1})$, the three prescribed words have distinct final names on this prefix code. For $k>g_1$ reverse. This finishes the proof.
+\end{proof}
+\section{When one word is a border of another}
+Work henceforth with a minimal counterexample as in Section~1. If $x$ is a proper prefix and suffix of $y$, the third word $z$ differs from $x$ in both end letters. Write $y=x^i r=s' x^j$ with $i,j\ge1$ maximal. Both remainders are nonempty by noncommutation. Maximality of $i$ excludes $x$ as a prefix of $r$. If $r$ were a prefix of $x$, $xr$ would begin with $r$ and, being a suffix of $y$, end with $x$. Hence $xr=rx$ by lengths and $x$ would commute with $y$. Thus $r,x$ are prefix-incomparable. If $r$ started like $x$, the set $x,r,z$ would therefore be prefix and $x,x^i r,z$ would lift by lengthening. Thus $r$ starts like $z$, and $s'$ ends like $z$ by reversal.
+
+There are nonempty words $p,q$, with the end letters of $x,z$ respectively, such that
+\begin{equation}\label{border}
+ c=qp,\qquad x=p c^n,\qquad y=x^i c x^{j-1},\qquad n\ge0 .
+\end{equation}
+For disjoint end powers take $p=x$ and the middle word as $q$, which is nonempty since otherwise $y$ would be a power of $x$. If the end powers overlap by at least $|x|$, then $|xr|\le |x^j|$. Both $xr$ and $x^j$ are suffixes of $y$, so $xr$ is a suffix of $x^j$. Now $xr$ and $rx$ are suffixes of $x^{j+1}$. For $xr$, prefix $x$ to $x^j$. For $rx$, append $x$ to $x^j$, which already ends in $r$. Their lengths agree, hence $xr=rx$. This would make $x$ commute with $y=x^i r$. The remaining overlap $d$ has $0<|d|<|x|$, and $x=dV=U d$ with $|U|=|V|$ and $r=Vx^{j-1}$, $s'=x^{i-1}U$. The identity $dV^m=U^m d$ implies $d=U^e p$, $U=pq$, $|p|<|U|$. Cancellation gives $V=qp$, where $p$ is nonempty since $U,V$ have different initials. Then $x=p(qp)^{e+1}$. The initial of $U$ and final of $V$ give the ends of $p$, while the initial of $V$ and final of $U$ give the ends of $q$. Reversing~\eqref{border} exchanges $i,j$ and reverses $p,q$, since $xqp=pqx$.
+
+The lists $(p,q,z),(p,qp,z),(p,pq,z)$ must all be ambiguous. Indeed $(x,c,z)$, if injective, would be shorter and would lift by lengthening $c$ by copies of $x$. If $(p,c,z)$ were injective, $(x,c,z)$ would be injective by the prefix code $P C^n,C,Z$ on distinct names. Reverse for $pq$. If $(p,q,z)$ were injective, it would be shorter, and on its names the two words $x,y$ form a noncommuting pair disjoint from the private letter $Z$ of $z$. This also gives a completion.
+If $q\in\{p,z\}^*$, decode on the marked pair $p,z$ and apply Proposition~\ref{power} to the reading containing $z$ as a letter. If $z\in\{p,q\}^*$, decode on $p,q$. Both occur in $y$, so a token longer than one letter gives a strictly shorter reading. When both are letters, Proposition~\ref{power} ($n=0$) or Proposition~\ref{altern} ($n>0$) applies. If $q,z$ commute, decode on their common root and $p$ to get a power of a letter. The other two pairs have different initials and finals. Thus we can apply Lemma~\ref{model} to $(p,q,z)$.
+
+\parhead{A forbidden identity}
+For $e\ge1$, $c=qp$ cannot commute with $z^e p$. Otherwise $c$ commutes with $T=z^e x$. If $i=j=1$, $z^e y=T c$ commutes with $T$, an ambiguity since the two parsings first differ at $x,y$. If $j>1$, read $y$ on the prefix pair $x,z$. If it is not a prefix of a product on that pair, greedy reading gives a completion. Otherwise compare such a product with $x^iT^h$, choosing $h$ large enough that $cT$ is a prefix of $T^h$. Such an $h$ exists because $c,T$ are powers of a common word. The two readings agree through $x^ic$ and their next letters are the initials of $x$ and $z$, respectively. Since $x,z$ have distinct initials, their readings can first diverge only at a common token boundary. Thus $x^ic$ ends at a boundary, and appending $j-1$ copies of $x$ reads all of $y$ on $x,z$, contradicting injectivity. For $j=1<i$ the reversed parameters satisfy the same hypothesis. Indeed, cancellation of the common final $p$ in $qp z^e p=z^e pqp$ gives $qp z^e=z^e pq$, whose reversal gives the forbidden commutation for the reversed parameters after appending $\rev p$. This proves the exclusion.
+
+\parhead{The binary model}
+Equal-end pairs in the model agree with those of the actual pieces. If the model has two letters as entries, one must be $p$ because the other two entries share their initials. The third then reads on these letters, an excluded reading. Let $a$ be its distinguished letter, and write $H_m=H_m(g)$ whenever the gap is fixed.
+
+If $p=a$, both other words start and end in $b$. A singleton $b$ was just handled. Thus $q=H_m,z=H_t$ with $m,t\ge2$ coprime and $g\ge1$. For $g=1$, $qp$ and $zp$ commute. If $n=0$, then $x=a$, $y=a^i q a^j$. Since $za^g q=qa^g z$, when $i,j\le g$ the relation $a^i z a^{g-i} y=y a^{g-j}z a^j$ is an ambiguity. If $j>g$, $(a,q a^j,z)$ is injective. Split the $b$'s of any product into maximal groups with all internal gaps $g$. No mixed token crosses a split and $qa^j$ can occur only last in a group. Its presence is determined by the group length modulo $t$, since $t\nmid m$. The length then gives the number of $z$'s, and the remaining $a$'s are fixed. This shorter actual list lifts by prefixing $p^i$. Reversal handles $i>g$.
+For $g\ge2$, $n\ge1$, take coordinates $J=ba^g,D=a^{-1}$ and conjugate by $D$, i.e. send a word $w$ to $DwD^{-1}$. The list $(x,c,z)$ becomes
+\[
+ (J^mD^{g-1})^{n-1}J^mD^{g-2},\quad DJ^mD^{g-2},\quad DJ^tD^{g-1}.
+\]
+For $g\ge3$ it is prefix. For $g=2$, maximal $J$-runs of length not divisible by $m$ locate exactly the interior $J^t$ of the third token, flanked by $D$'s. The remaining tokens have distinct initials. This contradicts the necessary ambiguity of $(x,c,z)$.
+
+If $z=a$, then $p$ starts and ends in $b$ and $q$ starts and ends in $a$. For $\bct p=1$ we have the already handled second letter. Otherwise both ambiguous lists $(a,p,qp)$ and $(a,p,pq)$ have mixed counts $N,N+M$ with $N=\bct p\ge2$, $M=\bct q$, and $\gcd(N,M)=1$. Lemma~\ref{counts} forces the same gap $g$ in both lists (an internal gap of $p$ fixes it). Both margins of $q$ must equal $g$ by the joins. Thus $qp=(a^g b)^{M+N}$ and $z^g p=(a^g b)^N$ commute, with $g\ge1$.
+
+If $q=a$, $p$ begins and ends in $b$ and $z$ begins and ends in $a$. The tests $(p,ap,z)$ and $(p,pa,z)$ force both margins of $z$ to be one, since a larger initial margin gives the distinct prefixes $b,ab,aa$ and reversal handles the other end. For $\bct p,\bct z\ge2$, write $p=H_N$, $z=aH_M a$ with common gap $g\ge1$. If $g=1$, $qp$ and $zp$ commute. For $g\ge2$, in the preceding $J,D$ coordinates and conjugation, the entries $c,z,x$ are
+\[
+ J^N D^{g-1},\quad J^M D^{g-2},\quad D(J^N D^{g-1})^{n+1}.
+\]
+For $g\ge3$ these are prefix. For $g=2$, the pure $J^M$ tokens before the first $D$ give a $J$-run of length $dM$ or $dM+N$ according as the next nonpure token is the third or first, giving distinct residues. Iteration gives injectivity. Finally $p=b$ was handled, so in the one-count case $z=aba$. All gaps of $p$ are positive by ambiguity of $(a,p,z)$. In products of $p,ap,aba$ all joins have length at most two. A gap above two would therefore locate every $p$ body by the gap-location argument. All other $b$'s are singletons, and the known right margins fix the left margins, distinguishing $p$ from $ap$. Lemma~\ref{short} now gives $p=E(aE)^t$ where $E=H_d(2)$, $t\ge0$ (take $t=0$ if there is no gap one). Then $z^d=aEa$, so $qp=(aE)^{t+1}$ commutes with $z^d p=(aE)^{t+2}$. This exhausts the border case.
+\section{When the prefix and suffix comparisons use different pairs}
+Up to reversal, write the prescribed triple and its two single shortenings as follows. Here $t,u,v$ are nonempty.
+\begin{center}
+\begin{tabular}{c@{\qquad}lll}\toprule
+& Prescribed triple $X$ & First shortening $Y$ & Second shortening $Z$\\\midrule
+I   & $t,tu,vt$     & $t,u,vt$    & $t,tu,v$\\
+II  & $t,vt,vtu$    & $t,vt,u$    & $t,v,vtu$\\
+III & $u,v,utv$     & $u,v,tv$    & $u,v,ut$\\
+IV  & $ut,tv,utv$   & $ut,tv,v$   & $ut,tv,u$\\\bottomrule
+\end{tabular}
+\end{center}
+The common member of the two comparisons is shortest on both sides (I), intermediate (II), or longest on both sides. In the last situation its specified prefix and suffix either leave a nonempty middle (III) or overlap (IV). Exact juxtaposition would be a product of the other two words. Every shortening in the table must be ambiguous by minimality and the shortening rules.
+
+If the three pieces are injective, they form a shorter list in every row. In I--III their outer code contains a letter, so Proposition~\ref{power} and composition apply. In IV the outer words $UT,TV,V$ form a prefix code, and on those three names the target is $E,F,EV'$, a suffix code. If two pieces commute, use their common root and the third piece as generators. They form a code, since otherwise all prescribed words commute. In I and II the reading of $t$ is a letter or a pure power, and in III one of $u,v$ gives such a reading. In IV the same is true of $ut$ or $tv$ unless $u=r^i,v=r^j$. On the independent letters $r,t$ the target then reads $r^i t,t r^j,r^i t r^j$. For $i=j$ the product of the first and third equals the product of the third and second. For $i<j$ the prefix code $r^j,r^i t,t$ gives readings $E,FR,ER$, a suffix code. Reverse for $i>j$. Thus every commuting case lifts or contradicts injectivity.
+
+We may therefore work in the binary model of the ambiguous pairwise noncommuting pieces. An equation making $X$ ambiguous or a proof that $Y$ or $Z$ is injective suffices. In I and II, $t,v$ have different initials and $t,u$ different finals. In III, $u,v$ differ at both ends. In IV, $u,t$ have different initials and $t,v$ different finals. These statements follow first for the actual words from the two end letters of $X$, then for the model by the cancellation observation after Lemma~\ref{model}. The two pieces other than $a$ always have positive coprime $b$-counts.
+
+\parhead{I and II with $t=a$}
+In I the word $u$ ends in $b$ and $v$ begins in $b$. If one has one $b$, orient by reversing and interchanging the lateral pieces so that $u=a^p b$. Ambiguity of $Z=(a,a^{p+1}b,v)$ forces all gaps of $v$ to be at least $p+1$ by~\eqref{one}. Appending $a$ to $v$ leaves those gaps unchanged, so $X$ is ambiguous. If the two counts are at least two, write $u=a^p H_m(g)$, $v=H_n(g)a^q$ by Lemma~\ref{counts}. Applying the margin bound of that lemma to $Y,Z$ gives $q+1\le g$ and $p+1\le g$. A text of $mn$ equally spaced $b$'s, with gap $g$ and sufficiently large outer margins, admits tilings by copies of $au$ alone or of $va$ alone, with single $a$'s filling the gaps.
+
+In II write $m=\bct v$, $n=\bct u$ and let $s$ be the terminal margin of $v$. If $m\ge2$, the ambiguous $Z=(a,v,vau)$ has counts $m,m+n$. All gaps are $g=s+1+i$, where $i$ is the initial margin of $u$. Thus $va$ and $vau$ start in $b$, have uniform gap $g$, and have terminal margins $s+1$ and zero. Appending free $a$'s to each gives powers of $ba^g$, whose commutation gives different first tokens in $X$. If $m=1$, $v=ba^s$ and ambiguity of $Y=(a,ba^{s+1},u)$ forces all gaps of $u$ to be at least $s+1$. This holds also for $vau$, including the join. Thus $(vau)a^{s+1}$ reads on $a,va$, again an ambiguity. This argument uses only the end markings and coprimality, so it also handles II whenever $t=b$ and another piece is $a$, by interchanging the two binary letters.
+
+\parhead{I and II with a lateral letter}
+In I reverse if necessary so $u=a$. Write $P=t,Q=v$, and $i,h,q$ for the initial margins of $P,Q$ and the terminal margin of $Q$. Thus $P$ ends in $b$ and $P,Q$ have different initials. The two ambiguous lists are $(a,P,QP)$ and $(P,Pa,Q)$. As in the proof of Lemma~\ref{model}, cancellation of the first difference $P$ against $Pa$ gives $F=aG$ between nonempty products containing $b$. Hence $\{i,h\}=\{0,1\}$. The terminal margins $0,1,q$ would give a suffix code if $q>1$.
+
+In II with $u=a$, use the same $P,Q,i,h,q$. The lists are $(a,P,QP)$ and $(P,Q,QPa)$. A first difference in the latter compares $Q$ with $QPa$. After $Q$ the shorter side must take $P$, the only token of its initial. Cancellation again gives $F=aG$, implying the same bounds on $i,h$. The terminal margins $0,q,1$ give $q\le1$.
+In II with $v=a$, use $P=\rev t,Q=\rev u$. The reversed tests are $(P,Pa,Q)$ and $(a,P,QP a)$, giving the same bounds. In this last test the extra final $a$ may be removed by right shortening on the named list. Thus in all three situations $(a,P,QP)$ is ambiguous. Put $m=\bct P$, $n=\bct Q$, $N=m+n$.
+
+If $m\ge2$, Lemma~\ref{counts} gives
+\[
+ P=a^i H_m(g),\qquad Q=a^h H_n(g)a^q,\qquad g=q+i .
+\]
+The two initial margins $i,h$ of $P,QP$ give $g\ge1$, so there are three possibilities. To verify the outcomes together, let $(B_1,B_2,B_3)$ denote $(P,Pa,QP)$ in I, $(P,QP,QP a)$ in II with $u=a$, and $(P,Pa,QP a)$ in the reversed II with $v=a$. For $g=1$, direct substitution gives the identities in the table.
+\begin{center}
+\begin{tabular}{clll}\toprule
+$(i,q)$& I & II, $u=a$ & reversed II, $v=a$\\\midrule
+$(1,0)$ & $B_1(B_2B_3)=(B_2B_3)B_1$ & $B_2B_1^N=B_3^mB_2$ & $B_1^N B_2=B_2 B_3^m$\\
+$(0,1)$ & $B_2^{N}B_1=B_1B_3^{m}$ & $B_2(B_3B_1)=(B_3B_1)B_2$ & $B_2(B_1B_3)=(B_1B_3)B_2$\\\bottomrule
+\end{tabular}
+\end{center}
+For clarity, when $(i,q)=(1,0)$ we have $P=(ab)^m$, $QP=b(ab)^{N-1}$, and when $(i,q)=(0,1)$ we have $P=(ba)^{m-1}b$, $QP=(ab)^N$. Moving one end letter through the alternating product proves each displayed equality. For $g=2$, $i=q=1$. In coordinates $J=aba,D=a^{-1}$ we have $P=J^mD$, $Pa=J^m$, $Q=DJ^n$, $QPa=DJ^N$. The residue test gives injectivity of $(P,Pa,Q)$, with terminal exponents $0,n$ distinct modulo $m$. The other test $(P,Q,QPa)$ is suffix, by terminal $J$-run lengths $0,n,N$. This excludes $g=2$ in all three columns.
+
+Suppose $m=1$. In I, if $P=b$, $Q$ starts in $a$ and~\eqref{one} with interchanged letters makes $(b,ba,Q)$ and $(b,ba,Qb)$ equivalent as tests because appending $b$ preserves gaps between successive $a$'s. Otherwise $P=ab$ and $Q$ starts in $b$. The suffix pair $ab,aba$ must read $Q$ as a suffix of a product. Each $b$ is the second symbol of its token, so $aQ$ reads completely. Now $(Pa)(QP)=P(aQ)P$ has different first tokens.
+
+In II the case $t=b$ was settled above. If $v=a$ and $m=1$, in the original direction $t=ba$ and $u$ ends in $b$. The prefix pair $ba,aba$ must read $u$ as a prefix of a product by ambiguity of $(t,at,u)$. Both tokens end in $a$, and the only proper prefixes ending in $b$ are $b,ab$. Thus $ua$ reads completely, and $(atu)(at)=(at)(ua)t$ has two parsings.
+
+There remains II with $u=a$, $P=ab$ and $Q=b\bigl(\prod_{j=1}^{n-1} a^{g_j}b\bigr)a^q$. All its internal gaps are positive by ambiguity of $(a,ab,Q)$. In the ambiguous test $(ab,Q,Qaba)$ the first distinct tokens must be $Q$ and $Qaba$. Cancelling $Q$ gives $F=abaG$ between token products. Only $ab$ begins in $a$, so $F=abF_1$ and $F_1=aG$. The same rule gives $F_1=abF_2$ and $G=bF_2$. The first token of $G$ begins with $Q$, so the part of $Q$ after its initial $b$ is a prefix of $F_2$. Each positive gap now starts at a token boundary. Only $ab$ can be read there, so the gap is one and the next $b$ again ends at a boundary. This proves $g_j=1$ for every $j$.
+
+For $q=0$ the middle column's first identity still holds with $m=1$. For $q=1$ the test is $ab,(ba)^n,(ba)^n aba$. After a first difference the unmatched suffix is $aba$. Comparing with $ab$ leaves $a$, and comparing $a$ with $ab$ leaves $b$ on the opposite side. From $b$ the two possible remainders are $(ab)^{n-1}a$ and $(ab)^{n-1}aaba$. Removing forced copies of $ab$ leads back to $a$ or to $aaba$, which is incomparable with every token. No remainder reaches $\eps$, as two complete distinct parsings would require. This exhausts I and II.
+\parhead{III. A disjoint prefix and suffix}
+If $u=a$ (or $v=a$ by reversal and interchange), write $v=E$, which starts and ends in $b$. Put $m=\bct E$, $n=\bct t$. If $m=1$, $E=b$ and the third word already reads on the first two. For $m\ge2$, apply Lemma~\ref{counts} to $(a,E,tE)$ with counts $m,m+n$. Thus $tE$ and $E$ have constant gap $g$. The other ambiguous test $(a,E,at)$ forces the initial margin of $at$ to be at most $g$, by the same lemma if $n\ge2$ (the counts are distinct and coprime), or by the one-$b$ margin bound applied to the gaps of $E$ if $n=1$. Hence $E$ and $atE$ have uniform gap $g$, terminal margin zero, and initial margins at most $g$. Padding by free $a$'s realizes two tilings of a text with $m(m+n)$ equally spaced $b$'s.
+
+For $t=a$, the tests are $(u,v,av)$ and $(u,v,ua)$. If $v$ began in $a$, then $v,av$ would have different positive initial margins while $u$ starts in $b$, giving a prefix code. Thus $v$ starts in $b$ and $u$ in $a$. Reversal gives $u$ ending in $b$ and $v$ in $a$. The only possible prefix comparison of $(u,v,av)$ is $u$ with $av$, so $u$ starts with $ab$. Likewise $v$ ends with $ba$. Set $m=\bct u,n=\bct v$.
+
+If one count is one, orient so $u=ab$. The suffix pair $ab,aba$ forces $v$ to be a suffix of a product, so its gaps are all one or two. In coordinates $J=aba,D=a^{-1}$ we have $u=JD$, $v=DH$, $av=H$, with $H=J\prod_{j=1}^{n-1}(D^{2-g_j}J)$ from the gaps of $v$. A gap two gives $H=(JD)^d JJ K$ for a word $K$. The words $JD,DH,JJ K$ form a prefix code, so restoring $(JD)^d$ in front of the third gives an injective test. Thus all gaps are one. If $m,n\ge2$, Lemma~\ref{counts} instead gives $u=aH_m(g),v=H_n(g)a$ with uniform $g\ge1$. For $g\ge3$, all joins in $(u,ua,v)$ have at most two $a$'s. Splitting at gaps different from $g$ locates each body, with its count $m$ or $n$ identifying its left margin. The remaining right margin distinguishes $u$ and $ua$. For $g=2$ the test is $J^mD,J^m,DJ^n$, already proved injective by residues. In the remaining alternating case (also when $m=1$), $u=(ab)^m$, $v=(ba)^n$ and $w=uav=(ab)^{m+n}a$. The equality $u^n w=w v^m$ contradicts injectivity.
+
+\parhead{IV. An overlapping prefix and suffix}
+Put $x=ut$, $y=tv$, $w=utv$. We first note a useful test. If $K$ starts and ends in $b$ and $(ba,K,aK)$ is ambiguous, then $K=(ba)^d b$. Indeed shortening $aK$ on the right gives the ambiguous list $(ba,K,a)$, so all gaps of $K$ are at least one. A last difference compares $K$ and $aK$. On the shorter side the preceding token must be $ba$, the only one ending in $a$. Cancellation gives $R b=S$ with $R,S$ products of the three tokens. The product $S$ ends in $K$, so $K$ without its final $b$ is a suffix of $R$. If nonempty, this prefix of $K$ ends in $a$ because $bb$ is absent, and must remove a token $ba$. It starts in $b$ so cannot consist just of $a$. After each removal a nonempty remainder again ends in $a$, since it precedes the removed $b$ within $K$. Hence $K$ without its final $b$ is a product of $ba$'s.
+
+Suppose $t=a$. Initially $u$ begins in $b$ and $v$ ends in $b$. In $(u,ua,av)$ a first difference $u$ versus $ua$ forces $av$ on the shorter side. After $ua$, one side begins with $v$ and the other is a token product. If $v$ had $s>0$ leading $a$'s, only $av$ could start the other product, with $s+1$ leading $a$'s. Thus $v$ begins in $b$. The reversed test $(\rev v,\rev v a,a\rev u)$ likewise makes $u$ end in $b$.
+Write $m=\bct u,n=\bct v$. If $m=1$, then $u=b$ and $(ba,v,av)$ forces $v$ alternating by the preceding test. Reverse if $n=1$. Otherwise $(a,u,v)$ is ambiguous and Lemma~\ref{counts} gives $u=H_m(g),v=H_n(g)$ with $g\ge1$. In the first difference just described the newly begun body $v$ faces a token $u$ or $ua$ since it begins in $b$. If $n<m$, its end is inside $u$, yet after $v$ a join has at most one $a$, forcing $g\le1$. If $m<n$ and $g\ge2$, the join following the shorter body $u$ inside $v$ must be $ua$ followed by $av$, the only join of length at least two. This second body $v$ begins later than the first and ends later. At the end of the first we again have a join of at most one $a$ inside a gap of size $g$. Thus only $g=1$ remains. In every alternating case $x=(ba)^m$, $y=(ab)^n$, $w=(ba)^{m+n-1}b$, and $x^n w=w y^m$.
+
+Finally suppose $u=a$, which includes $v=a$ by reversal and interchange. The word $t$ begins in $b$. Denote by $r$ its terminal margin and by $s,q$ the initial and terminal margins of $v$. A last difference in $(at,tv,v)$ compares $v$ with $tv$. On the shorter side the preceding token must be $at$, by the different terminal letters of $t,v$. Cancellation gives $R a=S$ between products, hence $\{r,q\}=\{0,1\}$. Both products must contain $b$, since no token is a power of $a$. Also $s\le1$, since if $s\ge2$ the three initial margins $1,0,s$ give a prefix code. Put $m=\bct t,n=\bct v,N=m+n$.
+
+If $m\ge2$, the ambiguous $(a,at,tv)$ has mixed counts $m,N$. Its common gap is $g=r+s\le2$, and $g\ge1$ by the initial margin of $at$. For $g=1$, if $r=1$ then $s=q=0$, $x=a(ba)^m$, $y=(ba)^{N-1}b$, $w=(ab)^N$, and $xy=(ab)^{m+N}$ commutes with $w$. If $r=0$ then $s=q=1$, $x=(ab)^m$, $y=(ba)^N$, $w=(ab)^N a$, and $x^N w=w y^m$. These identities hold for $m=1$ as well whenever the gaps are one. If $g=2$, $r=s=1$, $q=0$. In $J=aba,D=a^{-1}$ coordinates, $(at,tv,v)$ becomes $J^m,DJ^{N}D,J^nD$. Immediately before a $D$ the length of the $J$-run is $0\pmod m$ at a double token's start and $n\pmod m$ at its end or at a single token's end. Since $m\nmid n$, this identifies every double token, then every single marked token, and finally all pure tokens. The test is injective.
+
+For $m=1$ we have $t=b$ or $t=ba$. In the first case, interchanging the binary letters sends $t$ to $a$ and preserves both shortening tests and injectivity of $X$. The case $t=a$ above therefore excludes it.
+
+It remains that $t=ba$, so $q=0$, $v=a^s K$ with $s\in\{0,1\}$, and $K$ starts and ends in $b$. Write $W=tv$ and $B=\rev K$. The ambiguous shortening $(aba,W,v)$, read backwards, has tokens
+\[
+                 aba,\qquad V=B a^s,\qquad Vab .
+\]
+At the first distinct tokens, cancel $V$ to get $F=abG$ between products. Only $aba$ begins in $a$, so $F=abaF_1$, $G=aF_1$, and then $G=abaG_1$, $F_1=baG_1$. The first token of $F_1$ begins with $B$. After its first $b$, the rest of $B$ is therefore a prefix of $aG_1$.
+
+Consider its initial consecutive gaps of length at least two. In each such gap the first $a$ is already present, and the second forces the token $aba$. The next $b$ thus occurs after exactly two $a$'s. The final $a$ of that token puts the reading in the same position for the following gap. Hence this initial block consists entirely of twos. The gaps of $\rev W=B a^{1+s}b$ append just one gap to those of $B$. If it extends the block, it too is two.
+
+The other shortening $(a,aba,W)$ is ambiguous, as is its reversal. All gaps of $\rev W$ are positive. Split it at gaps of length one. If a split occurs, Lemma~\ref{short} identifies every block with the initial block. If no split occurs, the initial block is the whole word. In either case $\rev W=E(aE)^j$, where $E=H_d(2)$, $d\ge1$, $j\ge0$. This word is a palindrome, so $W=E(aE)^j$ as well. Now $x=aba$, $y=W$ and $w=aW$. Since $x^d=aEa$,
+\[
+                      x^d y=(aE)^{j+2},\qquad w=(aE)^{j+1}.
+\]
+These powers commute. The parsings $(x^d y)w$ and $w(x^d y)$ have different first tokens, contradicting injectivity.
+
+The two comparison pairs of a minimal counterexample must either coincide or occur in I--IV. Each possibility has been excluded. Lemma~\ref{cert} gives the asserted finite maximal code and its unique positive factorization.\hfill$\square$
+\end{document}
