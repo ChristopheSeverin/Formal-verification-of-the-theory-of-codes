@@ -1,0 +1,73 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,amsmath,amssymb}
+\usepackage[margin=22mm,top=18mm,bottom=19mm]{geometry}
+\usepackage{microtype}
+\pdfinfoomitdate=1
+\pdftrailerid{}
+\pdfsuppressptexinfo=15
+\usepackage[hidelinks,pdflang={en},
+  pdfauthor={Astra 6.2},
+  pdftitle={A nonfree factor of the binary free monoid},
+  pdfsubject={Supervised by Christophe Cordero. Discovered on 25 November 2026.}]{hyperref}
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{.65em}
+\newcommand{\w}[1]{\mathit{#1}}
+\begin{document}
+{\LARGE A nonfree factor of the binary free monoid\par}
+\smallskip
+\begin{tabular*}{\linewidth}{@{}l@{\extracolsep{\fill}}ll@{}}
+{\small\sffamily Author} & {\small\sffamily Supervisor} & {\small\sffamily Date of discovery} \\
+Astra 6.2 & Christophe Cordero & 25 November 2026
+\end{tabular*}
+\par\smallskip\hrule\medskip
+
+\textbf{Theorem.} Let $A^*$ be the monoid of finite words on $A=\{a,b\}$
+under concatenation, and let $t^*$ denote all powers of a word $t$, including the
+empty word. There is a nonfree submonoid $M$ of $A^*$ such that every word has
+a unique decomposition in the product
+\[
+  A^*=(\w{ab})^*\,b^*\,M\,a^*\,(\w{aabb})^*.
+\]
+
+\textit{Proof.} Let $D$ be the words without prefix $\w{ab}$, and $E$ those
+without suffix $\w{aabb}$. Let $L$ consist of the words in $D$ whose initial
+$b$, if present, is followed by $\w{ab}$. Let $R$ consist of the words in $E$
+whose final $a$, if present, is preceded by $\w{aabb}$. Set $M=L\cap R$.
+
+Taking the longest initial power of $\w{ab}$ gives $A^*=(\w{ab})^*D$ uniquely.
+Taking the longest terminal power of $\w{aabb}$ likewise gives
+$A^*=E(\w{aabb})^*$. The definitions give the disjoint unions
+$D=L\sqcup bD$ and $E=R\sqcup Ea$. In the second alternative of either union,
+deleting the indicated letter leaves a shorter word in the same language.
+Induction on length therefore gives the unambiguous products
+\[
+  A^*=(\w{ab})^*\,b^*\,L, \qquad A^*=R\,a^*\,(\w{aabb})^*.
+\]
+If appending $s\in a^*(\w{aabb})^*$ to a word $x$ created a prefix $b$,
+$\w{ab}$, or $\w{bab}$, then $s$ would start with a nonempty suffix of one of
+these three words. The only such suffixes are $b$, $\w{ab}$, and $\w{bab}$.
+None can begin $s$, which is empty, equals $a$, or starts with $\w{aa}$.
+Thus $xs\in L$ exactly when $x\in L$. The second decomposition restricts to
+$L=M\,a^*\,(\w{aabb})^*$. Substitution in the first gives the required unique
+decomposition.
+
+The empty word belongs to $M$. The only words of length one or two in $L$ are
+$a$ and $\w{aa}$, and both are excluded by $R$. Thus nonempty $u,v\in M$ have
+length at least three. The first three letters of $uv$ come from $u$, so
+$uv\in L$. If $v$ ends in $a$, it already ends in $\w{aabba}$. A final
+$\w{aabb}$ in $uv$ would have to cross the join, forcing $v=\w{abb}$, which
+violates the prefix rule. Hence $uv\in M$.
+
+The four parenthesized words in
+\[
+  (\w{aab})(\w{babab})=\w{aabbabab}=(\w{aabba})(\w{bab})
+\]
+lie in $M$ because each starts with $\w{aa}$ or $\w{bab}$ and ends with
+$\w{ab}$ or $\w{aabba}$. Each has length three or five, so none splits into two
+nonempty elements of $M$. If $M$ were free, each would be a letter of its free
+generating alphabet, since any longer word over that alphabet splits after its
+first letter. Equality would then force $\w{aab}=\w{aabba}$, contradicting
+their lengths.\hfill$\square$
+\end{document}
