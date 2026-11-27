@@ -1,6 +1,6 @@
 name = "CodeTheoryProofs"
 version = "0.2.0"
-defaultTargets = ["ThreeWordCodes", "NonfreeBinaryFactor", "SubalgebraFreeness"]
+defaultTargets = ["ThreeWordCodes", "NonfreeBinaryFactor", "SubalgebraFreeness", "SmallestNoncompletable"]
 
 [[require]]
 name = "mathlib"
@@ -18,3 +18,7 @@ srcDir = "proofs/nonfree-binary-factor/lean"
 [[lean_lib]]
 name = "SubalgebraFreeness"
 srcDir = "proofs/undecidable-subalgebra-freeness/lean"
+
+[[lean_lib]]
+name = "SmallestNoncompletable"
+srcDir = "proofs/smallest-noncompletable-code/lean"

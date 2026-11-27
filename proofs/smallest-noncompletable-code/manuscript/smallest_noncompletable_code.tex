@@ -1,0 +1,516 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,amsmath,amssymb,amsthm}
+\usepackage[margin=23mm,top=19.5mm,bottom=22mm]{geometry}
+\usepackage{microtype}
+\usepackage{fancyvrb}
+% Keep a rebuild independent of the host clock and absolute source path.
+\pdfinfoomitdate=1
+\pdftrailerid{}
+\pdfsuppressptexinfo=15
+\usepackage[hidelinks,pdflang={en},
+  pdfauthor={Astra 6.2},
+  pdftitle={\{aa,abab,baaa,b\} is a smallest code not included in any finite maximal code},
+  pdfsubject={Formalized in Lean by Opus 5.5. Supervised by Christophe Cordero.
+    Discovered on 26 November 2026.}]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newcommand{\head}[1]{\par\noindent\textbf{#1}\enspace}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\Z}{\mathbb{Z}}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\adj}{adj}
+\DeclareMathOperator{\rev}{rev}
+\setlength{\parskip}{.2em}
+\begin{document}
+\begin{center}
+  {\LARGE\bfseries\boldmath $\{aa,abab,baaa,b\}$ is a smallest code\\[2pt]not included in any
+  finite maximal code\par}
+\end{center}
+\noindent\begin{tabular*}{\linewidth}{@{}l@{\extracolsep{\fill}}lll@{}}
+{\small\sffamily Author} & {\small\sffamily Lean formalization} & {\small\sffamily Supervisor} &
+  {\small\sffamily Date of discovery} \\
+Astra 6.2 & Opus 5.5 & Christophe Cordero & 26 November 2026
+\end{tabular*}
+\par\smallskip\hrule\medskip
+
+Let $A$ be a finite alphabet. Write $A^*$ for its words, $\eps$ for the empty word, and
+$A^+=A^*\setminus\{\eps\}$. A set $Y\subseteq A^+$ is a \emph{code} if distinct finite
+sequences of its elements have distinct concatenations. A \emph{finite maximal completion} of $Y$
+is a finite code $M\supseteq Y$ maximal under inclusion among all codes on $A$. It is
+\emph{positively factorizing} if there are finite $L,R\subseteq A^*$ such that every word has a
+unique expression $\ell m_1\cdots m_jr$ with $j\ge0$, $\ell\in L$, $r\in R$ and $m_i\in M$. For
+finite $Y$ put $\lambda(Y)=\max_{y\in Y}|y|$, with $\lambda(\emptyset)=0$, and
+$\tau(Y)=\sum_{y\in Y}|y|$. On the empty alphabet the empty code is itself maximal and positively
+factorizing with $L=R=\{\eps\}$.
+
+\begin{theorem}[Simultaneous minimality]\label{thm:main}
+Every finite code $Y$ on a finite alphabet has a positively factorizing finite maximal completion
+on that alphabet whenever
+\[
+  |Y|\le3\qquad\text{or}\qquad\lambda(Y)\le3\qquad\text{or}\qquad\tau(Y)\le10.
+\]
+For any distinct letters $a,b$, the code $X=\{aa,abab,baaa,b\}$ has no finite maximal completion
+on any finite alphabet containing $a,b$. It attains the three minima $4$, $4$ and $11$
+simultaneously.
+\end{theorem}
+
+\section{A criterion on finitely many periodic words}
+
+For a language $C$, let $C^*$ consist of all concatenations of its members, including $\eps$. A
+word $w$ is \emph{framed} by $C$ if $lwr\in C^*$ for some $l,r\in C^*$. If $C\subseteq M$ and $M$
+is a code, every framed word of $M$ belongs to $C$. Indeed, a parsing of $lwr$ over $C$ must
+agree with the parsing over $M$ that uses $w$ as one word.
+
+Fix $d\ge2$ and choose integers $j_r\ge0$ with $j_r\equiv r\pmod d$ for $0\le r<d$ and $j_0=0$.
+Put
+\[
+  B=\{a^d\}\cup\{ba^{j_r}: 0\le r<d\},\qquad G=\{k\ge0: k<j_{k\bmod d}\}.
+\]
+In $B^*$ a word $ba^k$ must start with some $ba^{j_r}$ and continue in blocks of $a^d$. Thus $G$ is
+precisely the finite set of gaps $k$ for which $ba^k\notin B^*$.
+
+For $k\ge0$ let $v_k=a^kb$. On vertices $0,\dots,k$ put an $a$-edge of weight $1$ from $i$ to
+$i+1$ for $i<k$, and a $b$-edge of weight $t$ from $k$ to $0$. Write $U,V$ for the two adjacency
+matrices (rows are starting vertices) and $\rho_k$ for substitution $a\mapsto U$, $b\mapsto V$. For
+a finite set $C$ let $\chi_C=\sum_{w\in C}w$ be its noncommutative polynomial.
+
+\begin{theorem}[Finite-cycle criterion]\label{thm:criterion}
+Let $Y\subseteq\{a,b\}^+$ be a finite code containing $B$ and assume $G\ne\emptyset$. Suppose
+that for each $k\in G$, with $v=v_k$, the following conditions hold.
+\begin{enumerate}
+  \item[(i)] Every finite factor of the two-sided periodic word $v^{\Z}$ is framed by $Y$.
+  \item[(ii)] For some $h\ge1$, $v^h\in Y^*$ and $\det(I-\rho_k(\chi_Y))=1-t^h$.
+  \item[(iii)] For every $0<i<h$, $v^i\notin Y^*$ and there is $c_i\in Y^*$ with $c_iv^i\in Y^*$.
+\end{enumerate}
+Then $Y$ has no finite maximal completion on any finite alphabet containing $a,b$. These
+conditions are decidable from the given data.
+\end{theorem}
+
+\begin{proof}
+For a finite set $C\subseteq A^+$, Reutenauer's factorization theorem
+\cite[\S2, corollary, p.~172]{Reutenauer} says that $C$ is a maximal code on $A$ if and only if
+\[
+  1-\chi_C=P(1-\chi_A)S,\qquad P,S\in\Z\langle A\rangle.
+\]
+The coefficients may have either sign. The constant coefficients have product $1$, so we may
+normalize both to $1$. Suppose a finite maximal code contains $Y$. Apply this identity and send
+every letter outside $\Sigma=\{a,b\}$ to zero. Writing $M$ for its restriction to $\Sigma^+$, we
+have a code $M\supseteq Y$ and integral polynomials satisfying
+\begin{equation}\label{eq:fact}
+  1-\chi_M=P(1-a-b)S.
+\end{equation}
+
+\head{The gap polynomial.}If $w$ avoids every $ba^gb$ with $g\in G$, it is framed by $B$. Indeed,
+choose a multiple $N$ of $d$ greater than every $j_r$. In $(ba^N)wa^N$ the initial and final runs
+following a $b$ at the padded ends have length at least $N$, and every intervening $b$-to-$b$ gap
+in $w$ lies outside $G$. Hence each block $ba^m$ belongs to $B^*$, as do both pads. This forces
+every such word of $M$ into $B$. In particular the words of $M$ with at most one $b$ are exactly
+those of $B$.
+
+Write $P_0(x)=P(x,0)$ and $p(x,y)=\sum_{i,j\ge0}[a^iba^j]P\,x^iy^j$, where $[w]$ extracts the
+coefficient of $w$. Use $S_0,s$ similarly and put $J_d(x)=1+x+\dots+x^{d-1}$. Comparing words
+with zero and one occurrence of $b$ in \eqref{eq:fact} gives
+\begin{equation}\label{eq:onebee}
+\begin{aligned}
+  P_0(x)S_0(x)&=J_d(x),\\
+  \textstyle\sum_r y^{j_r}&=P_0(x)S_0(y)+(y-1)p(x,y)S_0(y)+(x-1)P_0(x)s(x,y).
+\end{aligned}
+\end{equation}
+The three terms in the second line place the unique $b$ in the middle, left and right factors,
+respectively. At $y=1$ the polynomial $P_0(x)$ divides the nonzero integer $d$, so its constant
+term forces $P_0=1$. Now $S_0=J_d$. At $x=1$, \eqref{eq:onebee} yields
+\begin{equation}\label{eq:gaps}
+  p(1,y)=\frac{\sum_r(y^{j_r}-y^r)}{y^d-1}=\sum_{g\in G}y^g,\qquad p(1,1)=|G|.
+\end{equation}
+The last polynomial equality sums the missing exponents in each residue class. Since $b\in M$,
+each $b^m$ with $m>1$ already parses as $m$ copies of $b$. Thus $b$ is the only pure $b$-word in
+$M$. Substituting $a=0$ in \eqref{eq:fact} therefore gives $P(0,b)S(0,b)=1$, hence $P(0,b)=1$.
+
+\head{The periodic determinants.}Write $D_k=\det\rho_k(P)$ and $H_k=\det\rho_k(S)$. They have
+constant term $1$, since at $t=0$ their matrices are $I$ and $J_d(U)$ with $U$ strictly upper
+triangular. Multilinearity of the determinant gives $[t]\det(I+tT+O(t^2))=\tr T$. A path reading
+$a^iba^j$ is closed precisely when $i+j=k$, in which case it starts at $j$ and is unique. Thus
+\begin{equation}\label{eq:trace}
+  [t]D_k=\sum_{i+j=k}[a^iba^j]P.
+\end{equation}
+
+For the column vectors $e_i$ of the standard basis, $V=te_ke_0^{\mathsf T}$. Factoring out an
+invertible $W$ and expanding in columns gives $\det(W-xy^{\mathsf T})=\det(W)(1-y^{\mathsf
+T}W^{-1}x)$, since terms using two proportional columns vanish. Applied with $W=I-U$, this gives
+$\det(I-U-V)=1-t$. Taking determinants in \eqref{eq:fact}, we obtain
+\begin{equation}\label{eq:det}
+  (1-t)D_kH_k=\det(I-\rho_k(\chi_M)).
+\end{equation}
+If $k\notin G$, every path avoids the forbidden gaps, so the readable words in $M$ and $B$
+coincide. Their matrix is $U^d+V\sum_rU^{j_r}$. The same rank-one calculation, using
+$(I-U^d)^{-1}=\sum_{q\ge0}U^{dq}$, gives
+\[
+  \det(I-\rho_k(\chi_M))=1-t\,\#\{(r,q):0\le r<d,\ q\ge0,\ j_r+dq=k\}=1-t.
+\]
+Thus $D_k=1$ for all $k\notin G$.
+
+\head{The side of the factorization that carries a period.}Choose $K>\deg P$ and form the series
+$F=\sum_{w\in\Sigma^*}1_{M^*}(wb^K)\,w$. For any language $T$ we use $\chi_T$ also for its
+characteristic series. In the formal series ring, \eqref{eq:fact} inverts to
+$\chi_{\Sigma^*}=S\chi_{M^*}P$ because $M$ is a code. For $|w|\ge\deg S$, the coefficient of
+$wb^K$ can only use the empty suffix from $P$, by $P(0,b)=1$, and every contributing prefix from
+$S$ lies in $w$. Consequently $SF=\chi_{\Sigma^*}+E$ for a polynomial $E$. The substitution
+$\rho_k$ extends to these series because a path using $n$ letters $b$ has length at most
+$(k+1)n+k$, so every coefficient is a finite sum. It sends $\chi_{\Sigma^*}$ to $(I-U-V)^{-1}$.
+Multiplication by $\adj(\rho_k(S))$ and then by $1-t=\det(I-U-V)$ shows that
+\begin{equation}\label{eq:poly}
+  (1-t)H_k\,\rho_k(F)\quad\text{has polynomial entries.}
+\end{equation}
+
+Now fix $k\in G$. By (i), the words of $M$ readable on this cycle are exactly the readable words of
+$Y$. Hence \eqref{eq:det} and (ii) give $(1-t)D_kH_k=1-t^h$. Moreover
+\[
+  v^nb^K\in M^*\quad\Longleftrightarrow\quad h\mid n.
+\]
+Multiples of $h$ follow from (ii) and $b\in Y$. Otherwise write $n=qh+i$, $0<i<h$. A $Y$-parsing
+of $c_iv^i$ has no cut after $c_i$, since such a cut would give a $Y$-parsing of $v^i$. Extend it
+by $v^{qh}b^K$. A parsing of $v^nb^K$ over $M$, preceded by a $Y$-parsing of $c_i$, would give a
+cut at that very position, contradicting uniqueness in $M^*$. The closed paths at vertex $0$ read
+exactly $v^n$, with weight $t^n$. Therefore $(\rho_k(F))_{00}=1/(1-t^h)$. By \eqref{eq:poly},
+$1-t^h$ divides $(1-t)H_k$. The preceding determinant identity now makes $D_k$ a unit in
+$\Z[t]$, and $D_k(0)=1$ gives $D_k=1$.
+
+Summing \eqref{eq:trace} over $k\ge0$ thus yields $p(1,1)=0$. The sum on its right is finite since
+$P$ is a polynomial. This contradicts \eqref{eq:gaps}.
+
+\head{Effectiveness.}A finite automaton for $Y^*$ consists of a loop spelling each word at a common
+initial and final vertex, with separate interior vertices. Determinize it by recording the set of
+current vertices. To recognize framed words, allow as starts its reachable accepting states, and as
+ends all states from which some word of $Y^*$ reaches an accepting state. These ends are computed
+by a product with the automaton for $Y^*$. With all vertices as starts and ends, the $v$-cycle
+recognizes its factors. Inclusion in the framed language is decided by searching its product with
+the complement of the complete deterministic framed automaton for an accepting path. The
+determinant determines $h$ if it is of the required form. The automaton for $Y^*$ tests the
+required powers. A witness $c_i$ exists precisely when the transition on $v^i$ takes some
+reachable accepting state to an accepting state.
+\end{proof}
+
+\section{The two-parameter family}
+
+For finite sets of nonempty words put
+\[
+  \partial(C,T)=\{r\ne\eps: ur\in T\text{ for some }u\in C\}.
+\]
+Let $D(C)$ be the least set $D$ with $\partial(C,C)\cup\partial(D,C)\cup\partial(C,D)\subseteq D$.
+All these residuals are proper nonempty suffixes of words of $C$, so the closure is finite.
+
+\begin{lemma}[Residual test]\label{lem:residual}
+A finite set $C\subseteq A^+$ is a code if and only if $D(C)\cap C=\emptyset$.
+\end{lemma}
+
+\begin{proof}
+After cancelling common initial words of two distinct parsings of the same word, the two unequal
+first words must be prefix-comparable. Their difference is an initial residual. At each subsequent
+step extend the shorter parsing by its next word. The comparison either reaches equality when the
+residual is that word, or gives one of the two strict quotients in the closure. Conversely each
+residual is realized by two partial parsings with different first words, one concatenation
+extending the other by the residual. This holds initially and is preserved by each comparison. A
+residual in $C$ therefore closes an ambiguity.
+\end{proof}
+
+\begin{theorem}[A family with no finite maximal completion]\label{thm:family}
+For all $d,s\ge2$, writing $u=ab$, the set
+\[
+  Y_{d,s}=\{a^d,ba^{d+1},u^s\}\cup\{ba^j:2\le j<d\}\cup\{bu^j:0\le j\le s-2\}
+\]
+is a code with no finite maximal completion on any finite alphabet containing $a,b$. The same
+holds after reversing every word.
+\end{theorem}
+
+\begin{proof}
+Choose $j_1=d+1$ and $j_r=r$ for $r\ne1$ in Theorem~\ref{thm:criterion}. Thus $G=\{1\}$. The
+initial residuals lie among $a^e$ for $1\le e\le d+1$, $e\ne d$, and $u^i$ for $1\le i<s$. Indeed
+the exponents of the words $ba^{j_r}$ have distinct residues modulo $d$, the words $bu^j$ are
+nested, and $ba^j$ ($j\ge2$) differs from $bu^i$ ($i\ge1$) at the third letter. The two words
+starting with $a$ differ at their second letter. Adjoining the single residual $bu^{s-1}$ gives a
+set closed under all comparisons with a codeword, as the table shows.
+\begin{center}
+\begin{tabular}{lll}
+Residual & Possible next residuals & Comparison word\\\hline
+$a^e$ & $a^{|d-e|}$ & $a^d$\\
+$a$ ($e=1$) & $bu^{s-1}$ & $u^s$\\
+$u^i$ & $u^{s-i}$ & $u^s$\\
+$bu^{s-1}$ & $u^{s-1-j}$ ($0\le j\le s-2$) & $bu^j$
+\end{tabular}
+\end{center}
+The first two letters distinguish all other comparisons except those beginning with $ba$ in the
+last row, where the third letter distinguishes the two forms. None of the listed residuals is a
+codeword. Lemma~\ref{lem:residual} proves unique decipherability.
+
+Set $c=ba^d$. For $n=qs+i$, $0\le i<s$, the two possible remainders give
+\[
+  cu^n=\begin{cases}(b)(a^d)(u^s)^q,& i=0,\\ (ba^{d+1})(bu^{i-1})(u^s)^q,& 1\le i<s.\end{cases}
+\]
+Thus $cu^n\in Y_{d,s}^*$ for every $n\ge0$, and $ca=ba^{d+1}\in Y_{d,s}$. For any nonempty
+alternating word $w$ there are $\alpha\in\{\eps,a\}$ and $\beta\in\{\eps,b\}$ with $\alpha
+w\beta=u^n$. The words $c\alpha$, $\beta$ frame $w$. For $0<i<s$ neither $a^d$ nor $u^s$ can begin
+a parsing of $u^i$, and $cu^i\in Y_{d,s}^*$. On the $ab$-cycle the readable codewords are $u^s$
+and $bu^j$ for $0\le j\le s-2$, giving
+\[
+  \rho_1(\chi_{Y_{d,s}})=\begin{pmatrix}t^s&0\\t+t^2+\dots+t^{s-1}&0\end{pmatrix}.
+\]
+Its required determinant is $1-t^s$, and $u^s\in Y_{d,s}$. All hypotheses of
+Theorem~\ref{thm:criterion} hold with $h=s$. Reversal bijects parsings by reversing their order,
+and preserves inclusions. It therefore preserves codes and maximality.
+\end{proof}
+
+\section{Positive completions for short words}
+
+We first record the algebraic form of positive factorization. Let $P,S$ be finite polynomials on
+$A$ with nonnegative integer coefficients and constant coefficient $1$. If
+\begin{equation}\label{eq:cert}
+  F=1+P(\chi_A-1)S
+\end{equation}
+has nonnegative coefficients, its support is a positively factorizing finite maximal code.
+Indeed, $F$ has zero constant coefficient, and inversion gives
+\[
+  S\Big(\sum_{j\ge0}F^j\Big)P=(1-\chi_A)^{-1}=\chi_{A^*}.
+\]
+Each coefficient on the left counts choices with multiplicities. Taking the other factors empty
+shows that $P$, $S$, $F$ all have coefficients at most one. The same identity gives the required
+unique factorization. Maximality follows from Reutenauer's equivalence above. Conversely, if every
+word has the unique expression $\ell m_1\cdots m_jr$ from the definition, then $\eps\in L\cap R$ by
+factoring $\eps$, and inversion of the characteristic-series identity yields \eqref{eq:cert} with
+$F=\chi_M$, $P=\chi_R$ and $S=\chi_L$. We call \eqref{eq:cert} a \emph{positive certificate} in
+this situation.
+
+\begin{proposition}\label{prop:short}
+Every code $C\subseteq A\cup A^2\cup A^3$ has a positively factorizing finite maximal completion
+with word lengths at most seven.
+\end{proposition}
+
+\begin{proof}
+Write $D=D(C)$ and partition the letters into $A\cap C$, $V=A\cap D$ and $U=A\setminus(C\cup D)$.
+Lemma~\ref{lem:residual} gives $C\cap D=\emptyset$. The closure rules imply, for $x,r\ne\eps$,
+\begin{equation}\label{eq:rules}
+  x\in C\cup D,\ xr\in C\ \Longrightarrow\ r\in D,\qquad x\in C,\ xr\in D\ \Longrightarrow\ r\in D.
+\end{equation}
+Use the sets
+\[
+  H=UA\cup AV,\qquad P_2=H\setminus(C\cup D),\qquad S_2=H\cap D.
+\]
+Complete the two factors by the sets of triples
+\begin{align*}
+  P_3&=\{xyz: xy\in P_2,\ x\notin U,\ z\in U,\ yz\notin D\},\\
+  S_3&=\{xyz: yz\in S_2,\ z\notin V,\ x\in V,\ xy\in D\}.
+\end{align*}
+Take $P,S$ to be the characteristic polynomials of $\{\eps\}\cup U\cup P_2\cup P_3$ and
+$\{\eps\}\cup V\cup S_2\cup S_3$. We show that \eqref{eq:cert} has nonnegative coefficients and
+contains $C$ in its support. In the coefficient calculations write $[T]$ for the indicator of a
+condition $T$.
+
+\head{Words of lengths one to three.}The coefficient of $x$ is $1-[x\in U]-[x\in V]=[x\in C]$. For
+$xy$ the coefficient is $[xy\in H]-[xy\in P_2]-[xy\in S_2]$, since
+$[x\in U]+[y\in V]-[x\in U][y\in V]=[xy\in H]$. Every $xy\in C$ belongs to $H$, since $x\notin U$
+forces $y\in V$ by \eqref{eq:rules}. Thus the coefficient is $[xy\in C]$.
+
+Before the triples $P_3,S_3$ are included, the coefficient of $xyz$ is
+\begin{equation}\label{eq:three}
+  [z\notin V][xy\in P_2]+[x\notin U][yz\in S_2]+[x\in U][z\in V].
+\end{equation}
+For $xyz\in C$, the two implications
+\[
+  z\notin V\ \Longrightarrow\ xy\notin C\cup D,\qquad x\notin U\ \Longrightarrow\ yz\in D
+\]
+follow from \eqref{eq:rules}. If $x\in U$ or $z\in V$, the last summand in \eqref{eq:three} is $1$
+when both hold. When just one holds, the first or second summand is $1$, respectively. If neither
+holds, $y\notin C$ because $yz\in D$ and $z\notin D$. Thus $y\in V$ or $y\in U$, putting $xy$ in
+$P_2$ or $yz$ in $S_2$, respectively. Adding $P_3,S_3$ subtracts one on each set. They are disjoint
+since $xy\in P_2$ on $P_3$ and $xy\in D$ on $S_3$. The two implications exclude $C$ from both sets.
+On $P_3$ the first term of \eqref{eq:three} is $1$, and on $S_3$ the second is $1$.
+
+\head{Words of lengths four to seven.}For a word $w$ of length $n\ge4$, let $p(t)$ mark the lengths
+of prefixes of $w$ in $\operatorname{supp}P$, and let $s(t)$ mark the lengths of suffixes in
+$\operatorname{supp}S$, with coefficient one for each marked length. Cutting $w$ into a prefix and
+a suffix, either adjacent or separated by one letter, gives
+\[
+  [w]F=[t^n]\,p(t)(t-1)s(t).
+\]
+A marked length three requires a marked length two on the same side. Thus each set of lengths is
+an initial interval or has polynomial $1+t^2+et^3$ with $e\in\{0,1\}$. For an interval
+$\{0,\dots,r\}$ its polynomial times $t-1$ equals $t^{r+1}-1$. The other factor has degree at most
+three, so the coefficient at $n\ge4$ is nonnegative.
+
+If both sides have a gap, denote their two bits by $e,f$. At degrees $4,5,6,7$ the coefficients
+are, in order,
+\[
+  e+f-1,\qquad 1-e-f,\qquad e+f-ef,\qquad ef.
+\]
+For $w=xyzh$ of length four the gaps force $xy\in P_2$, $x\notin U$, $zh\in S_2$, $h\notin V$.
+Since both pairs lie in $H$, $y\in V$ and $z\in U$. Hence $e=[yz\notin D]$ and $f=[yz\in D]$,
+giving $e+f=1$. At length five, $e=1$ requires the middle letter in $U$ and $f=1$ requires it in
+$V$, so $e+f\le1$. The last two coefficients are nonnegative for all bits. All degrees above seven
+vanish. This proves the proposition.
+\end{proof}
+
+\section{Cardinality and total length}
+
+For a word set $W$ let $\rev W$ consist of its words read backwards. Reversing a certificate
+exchanges its two factors and reverses their words. Sending the other letters to zero restricts a
+certificate to a subalphabet. Both operations preserve its nonnegativity and its constant
+coefficients.
+
+\head{At most three words.}The formalized three-word theorem \cite{ThreeWord} states that every
+uniquely decodable set of exactly three words on a finite alphabet is contained, on that alphabet,
+in a finite maximal code with a unique positive factorization as defined above. If $|C|<3$, adjoin
+$3-|C|$ fresh letters as individual codewords. In a parsing the positions of these letters are
+prescribed, and each intervening segment has at most one $C$-parsing. Thus the enlarged set is a
+three-word code. Restrict a certificate of its positive completion to the original alphabet. This
+proves the cardinality bound, including the empty code.
+
+\begin{lemma}[Shortening by prefix quotients]\label{lem:shortening}
+Let $H(W)$ be the smallest set containing a finite $W\subseteq A^+$ and closed under
+$(u,uv)\mapsto v$ for $v\ne\eps$. If a letter occurring in a code $W$ is absent from $H(W)$, there
+is a code $W'$ on a finite alphabet with $\tau(W')<\tau(W)$ whose positively factorizing finite
+maximal completions give such completions of $W$.
+\end{lemma}
+
+\begin{proof}
+All elements of $H(W)$ are nonempty suffixes of elements of $W$. Let $B$ consist of the elements
+of $H(W)$ with no shorter prefix in $H(W)$. Then $B$ is prefix-free. To parse a member of $H(W)$
+into $B$, remove its shortest prefix in $H(W)$. Every nonempty remainder again lies in $H(W)$, so
+this process reaches the empty word. The parsing is unique because distinct elements of $B$
+cannot start at the same cut. A word of $W$ containing the missing letter uses a block of length
+at least two.
+
+Take the finite tree whose internal vertices $I$ are the proper prefixes of $B$, and give every
+internal vertex all its $A$-children. Its leaves $E$ contain $B$. Regard the leaves as distinct
+letters of a new alphabet and let $\phi$ replace each such letter by its word on $A$. The leaves
+are prefix-free, so $\phi$ is injective. The $B$-parsings of $W$ form a code $W'$ over $E$, since
+distinct parsings of an equal concatenation over $W'$ would give distinct $W$-parsings of its
+image. The block of length at least two makes the total length strictly smaller.
+
+For clarity, $\chi_E$ here denotes the leaf polynomial on $A$. Counting the nonroot vertices of the
+full tree by their parents gives $\chi_E-1=\chi_I(\chi_A-1)$. If a positive completion $M'$ of
+$W'$ on the leaf alphabet has certificate factors $P',S'$, substituting $\phi$ gives
+\[
+  \chi_{\phi(M')}-1=\phi(P')\chi_I(\chi_A-1)\phi(S').
+\]
+This is a positive certificate on $A$, and its code contains $W$.
+\end{proof}
+
+\begin{lemma}[Finite bound for the two closures]\label{lem:closures}
+Let $W$ be a code with $|W|\ge4$, $\lambda(W)\ge4$ and $\tau(W)\le10$. At least one of $H(W)$ and
+$H(\rev W)$ omits a letter occurring in $W$.
+\end{lemma}
+
+\begin{proof}
+Put $n=\tau(W)$, so $7\le n\le10$. Sort the words by length and concatenate them. Up to renaming,
+after $k$ distinct letters have appeared, the next position contains one of those letters or the
+next unused letter. Cutting all such strings at the partial sums of all nondecreasing length
+profiles covers every $W$. Discard repeated words. Ties between lengths may represent the same set
+more than once, which does not affect a zero count.
+
+Let $T$ be the letters used. Since $H(W)$ consists of suffixes, the inclusion
+$T\subseteq H(W)\cap H(\rev W)$ requires each letter to occur both initially and finally in $W$.
+The columns successively impose this endpoint condition, the two closure conditions, and the
+residual test of Lemma~\ref{lem:residual}.
+\begin{center}
+\begin{tabular}{rrrr}
+$n$ & All letters at both ends & Both closures contain $T$ & Codes among these\\\hline
+7 & 97 & 81 & 0\\
+8 & 909 & 611 & 0\\
+9 & 7\,106 & 3\,845 & 0\\
+10 & 51\,910 & 24\,236 & 0
+\end{tabular}
+\end{center}
+The complete calculation below implements $\partial$ as \texttt{tails}. Its fixed-point iterations
+terminate because only nonempty suffixes of the words being tested are added. The two generators
+enumerate the profiles and letter patterns just described. The last column proves the lemma.
+\end{proof}
+
+\head{Completion of the proof of Theorem~\ref{thm:main}.}The first two bounds follow from the
+three-word result and Proposition~\ref{prop:short}. For the third, use strong induction on
+$\tau(Y)\le10$ simultaneously over all finite alphabets. Outside the first two bounds,
+Lemma~\ref{lem:closures} and, if necessary, reversal allow Lemma~\ref{lem:shortening} to shorten
+$Y$. The induction hypothesis supplies the positive completion on the leaf alphabet, and the lemma
+transports it back. Finally $X=Y_{2,2}$, so Theorem~\ref{thm:family} excludes every finite maximal
+completion of $X$. Its word lengths are $1,2,4,4$, so the three lower bounds are attained on
+every finite alphabet containing $a,b$.
+
+\section*{Finite calculation for Lemma~\ref{lem:closures}}
+
+\begin{Verbatim}[fontsize=\small]
+from itertools import accumulate
+
+def tails(U, V):
+    return {v[len(u):] for u in U for v in V
+            if u != v and v.startswith(u)}
+
+def close(S, step):
+    while True:
+        T = S | step(S)
+        if T == S:
+            return S
+        S = T
+
+def hull(W):
+    return close(W, lambda T: tails(T, T))
+
+def code(W):
+    def step(T):
+        return tails(T, W) | tails(W, T)
+    D = close(tails(W, W), step)
+    return W.isdisjoint(D)
+
+def profiles(n, lo=1):
+    if n == 0:
+        yield ()
+    for k in range(lo, n + 1):
+        for r in profiles(n - k, k):
+            yield (k,) + r
+
+def patterns(n, p='', k=0):
+    if len(p) == n:
+        yield p
+        return
+    for j in range(k + 1):
+        q = p + chr(97 + j)
+        yield from patterns(n, q, max(k,j+1))
+
+def count(n):
+    ends = both = codes = 0
+    for L in profiles(n):
+        if len(L) < 4 or L[-1] < 4:
+            continue
+        cuts = list(accumulate((0,) + L))
+        spans = list(zip(cuts, cuts[1:]))
+        for p in patterns(n):
+            W = {p[i:j] for i,j in spans}
+            A = set(p)
+            if len(W) != len(L):
+                continue
+            if {w[0] for w in W} != A:
+                continue
+            if {w[-1] for w in W} != A:
+                continue
+            ends += 1
+            R = {w[::-1] for w in W}
+            if A <= hull(W) and A <= hull(R):
+                both += 1
+                codes += int(code(W))
+    return ends, both, codes
+
+for n in range(7, 11):
+    print(n, *count(n))
+\end{Verbatim}
+
+\begin{thebibliography}{2}
+\bibitem{Reutenauer} C.~Reutenauer. Noncommutative factorization of variable-length codes.
+  \emph{Journal of Pure and Applied Algebra} 36 (1985), 167--186. Corollary of Section~2,
+  p.~172. \href{https://doi.org/10.1016/0022-4049(85)90069-6}{doi:10.1016/0022-4049(85)90069-6}.
+\bibitem{ThreeWord} Formal verification of the theory of codes. Lean declaration
+  \texttt{ThreeWordCodes.three\_word\_positive\_completion}, in
+  \texttt{ThreeWordCodes/MainTheorem.lean}, lines 16--19. The statement and the parsing predicate
+  are in \texttt{Statement.lean} and \texttt{Definitions.lean} in the same directory. Repository
+  revision \texttt{ff2b0011245e3eec688ea3ffe1181179958cf533}.
+\end{thebibliography}
+
+\end{document}
